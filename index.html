@@ -5,7 +5,7 @@
     <title>WebCollector by CrawlScript</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
-    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
     <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
   </head>
@@ -34,15 +34,29 @@
 <h2>
 <a id="installation" class="anchor" href="#installation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Installation</h2>
 
+<h3>
+<a id="using-maven" class="anchor" href="#using-maven" aria-hidden="true"><span class="octicon octicon-link"></span></a>Using Maven</h3>
+
+<p>To use the latest release of WebCollector, please use the following snippet in your pom.xml</p>
+
+<div class="highlight highlight-xml"><pre>    &lt;<span class="pl-ent">dependency</span>&gt;
+        &lt;<span class="pl-ent">groupId</span>&gt;cn.edu.hfut.dmic.webcollector&lt;/<span class="pl-ent">groupId</span>&gt;
+        &lt;<span class="pl-ent">artifactId</span>&gt;WebCollector&lt;/<span class="pl-ent">artifactId</span>&gt;
+        &lt;<span class="pl-ent">version</span>&gt;2.09&lt;/<span class="pl-ent">version</span>&gt;
+    &lt;/<span class="pl-ent">dependency</span>&gt;</pre></div>
+
+<h3>
+<a id="without-maven" class="anchor" href="#without-maven" aria-hidden="true"><span class="octicon octicon-link"></span></a>Without Maven</h3>
+
 <p>WebCollector jars are available on the <a href="https://github.com/CrawlScript/WebCollector">HomePage</a>.</p>
 
 <ul>
-<li><p><strong>webcollector-version-bin.zip</strong> contains core jars.</p></li>
-<li><p><strong>webcollector_example-version-bin.zip</strong> contains core jars with examples.</p></li>
+<li>
+<strong>webcollector-version-bin.zip</strong> contains core jars.</li>
 </ul>
 
 <h2>
-<a id="demo" class="anchor" href="#demo" aria-hidden="true"><span class="octicon octicon-link"></span></a>Demo</h2>
+<a id="quickstart" class="anchor" href="#quickstart" aria-hidden="true"><span class="octicon octicon-link"></span></a>Quickstart</h2>
 
 <p>Lets crawl some news from yahoo.This demo prints out the titles and contents extracted from news of yahoo.</p>
 
@@ -98,7 +112,7 @@ public class YahooCrawler extends BreadthCrawler {
             System.out.println("title:\n" + title);
             System.out.println("content:\n" + content);
 
-            /*If you want to add urls to crawl,add them to nextLink*/
+            /*If you want to add urls to crawl,add them to nextLinks*/
             /*WebCollector automatically filters links that have been fetched before*/
             /*If autoParse is true and the link you add to nextLinks does not match the regex rules,the link will also been filtered.*/
             // nextLinks.add("http://xxxxxx.com");
@@ -115,6 +129,24 @@ public class YahooCrawler extends BreadthCrawler {
     }
 
 }
+</code></pre>
+
+<h2>
+<a id="content-extraction" class="anchor" href="#content-extraction" aria-hidden="true"><span class="octicon octicon-link"></span></a>Content Extraction</h2>
+
+<p>WebCollector could automatically extract content from news web-pages:</p>
+
+<pre><code>News news = ContentExtractor.getNewsByHtml(html, url);
+News news = ContentExtractor.getNewsByHtml(html);
+News news = ContentExtractor.getNewsByUrl(url);
+
+String content = ContentExtractor.getContentByHtml(html, url);
+String content = ContentExtractor.getContentByHtml(html);
+String content = ContentExtractor.getContentByUrl(url);
+
+Element contentElement = ContentExtractor.getContentElementByHtml(html, url);
+Element contentElement = ContentExtractor.getContentElementByHtml(html);
+Element contentElement = ContentExtractor.getContentElementByUrl(url);
 </code></pre>
 
 <h3>
@@ -135,4 +167,3 @@ public class YahooCrawler extends BreadthCrawler {
   
   </body>
 </html>
-
