@@ -138,7 +138,11 @@ public class pptvcartoonCrawler extends BreadthCrawler {
 				v.setActeres(actors);
 				v.setDirector(director);
 				v.setDesc(desc);
+				if(StringUtils.isNotBlank(year)){
 				v.setYear(year);
+				}else{
+					v.setYear("2016");
+				}
 				String imgurl =page.select(".btn_more").get(0).attr("href");
 				String detailbody = GetIpAddress.getInfo(imgurl, 5000);
 				System.out.println(detailbody);
@@ -176,7 +180,7 @@ public class pptvcartoonCrawler extends BreadthCrawler {
 	}
 
 	public static void main(String[] args) throws Exception {
-		int i = 1;
+		int i = 10;
 		while (i > 0) {
 			pptvcartoonCrawler crawler = new pptvcartoonCrawler("crawl", true, i);
 			crawler.setThreads(50);
@@ -186,9 +190,10 @@ public class pptvcartoonCrawler extends BreadthCrawler {
 			crawler.start(4);
 			i--;
 		}
+		DBUtil DBUtil =new DBUtil();
 		for (Vodinfo v : result) {
 			try {
-				createSQL(v);
+				DBUtil.exesql(v.toString());
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
