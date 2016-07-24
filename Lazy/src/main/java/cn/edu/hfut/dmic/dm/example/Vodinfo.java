@@ -12,7 +12,7 @@ public class Vodinfo {
 	//视频title图片
 	private String img;
 	//幻灯图片
-	private String imglide;
+	private String imglide="";
 	private String title;
 	private String desc;
 	private String year;
@@ -20,20 +20,37 @@ public class Vodinfo {
 	private String score;
 	private String player;
 	private int hits;
+	private String needpay="";
 
 	@Override
 	public String toString() {
 		return "INSERT INTO `mac_vod` ( `d_name`, `d_subname`, `d_enname`, `d_letter`, `d_color`, `d_pic`, `d_picthumb`, `d_picslide`, `d_starring`, `d_directed`, `d_tag`, `d_remarks`, `d_area`, `d_lang`, `d_year`, `d_type`, `d_type_expand`, `d_class`, `d_topic`, `d_hide`, `d_lock`, `d_state`, `d_level`, `d_usergroup`, `d_stint`, `d_stintdown`, `d_hits`, `d_dayhits`, `d_weekhits`, `d_monthhits`, `d_duration`, `d_up`, `d_down`, `d_score`, `d_scoreall`, `d_scorenum`, `d_addtime`, `d_time`, `d_hitstime`, `d_maketime`, `d_content`, `d_playfrom`, `d_playserver`, `d_playnote`, `d_playurl`, `d_downfrom`, `d_downserver`, `d_downnote`, `d_downurl`) VALUES ('"
-				+ title + "', '', 'niuyueheibang', 'N', '', '" + img + "', '', '"+imglide+"', '" + acteres + "', '" + director
-				+ "', '" + smalltype + "', '', '" + area + "', '', " + year + ", " + bigtype
+				+ title + "', '', 'niuyueheibang', 'N', '', '" + img + "', '"+imglide+"', '"+imglide+"', '" + acteres + "', '" + director
+				+ "', '" + smalltype + "', '"+needpay+"', '" + area + "', '', " + year + ", " + bigtype
 				+ ", '', '', '0', 0, 0, 0, 0, 0, 0, 0, " + hits + ", 0, 5, 209, 0, 0, 0, 7.0, 2394, 342, "
 				+ System.currentTimeMillis() / 1000 + ", " + System.currentTimeMillis() / 1000 + ", "
 				+ System.currentTimeMillis() / 1000 + ", 0, '" + desc + "', '" + player + "', '0', '', '" + url
 				+ "', '', '', '', '')ON DUPLICATE KEY UPDATE   d_playfrom='" + player + "',  d_time="
-				+ System.currentTimeMillis() / 1000 + ", d_playurl='"+url+"' ,d_picslide = '"+imglide+"';";
+				+ System.currentTimeMillis() / 1000 + ", d_playurl='"+url+"';";
 	}
 
 	
+	
+
+	public String getNeedpay() {
+		return needpay;
+	}
+
+
+
+
+	public void setNeedpay(String needpay) {
+		this.needpay = needpay;
+	}
+
+
+
+
 	public String getImglide() {
 		return imglide;
 	}
