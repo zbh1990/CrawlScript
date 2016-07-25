@@ -208,13 +208,15 @@ public class LetvCrawler extends BreadthCrawler {
 			crawler.start(4);
 			i--;
 		}
+		DBUtil DBUtil =new DBUtil();
 		for (Vodinfo v : result) {
 			try {
-				createSQL(v);
+				DBUtil.exesql(v.toString());
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
+		DBUtil.close();
 	}
 
 	public static void createSQL(Vodinfo v) throws Exception {

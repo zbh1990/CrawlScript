@@ -94,7 +94,7 @@ public class HunanTVCrawler extends BreadthCrawler {
 				String playinfo=GetIpAddress.getInfo(playinfourl, 5000);
 				JSONObject j= new JSONObject(info);
 				JSONObject infob= j.getJSONObject("data").getJSONObject("info");
-				v.setHits(new JSONObject(playinfo).getJSONObject("data").getInt("all"));
+				//v.setHits(new JSONObject(playinfo).getJSONObject("data").getInt("all"));
 				v.setImg(infob.getString("img"));
 				v.setTitle(infob.getString("title"));
 			} catch (IOException e1) {
@@ -148,6 +148,7 @@ public class HunanTVCrawler extends BreadthCrawler {
 			v.setActeres(actors);
 			v.setDirector(director);
 			v.setDesc(page.select(".item.intro>span").outerHtml());
+			v.setHits(999);
 			//
 			// Elements typenode = page.select(".crumbs>a");
 			// String type
@@ -171,7 +172,7 @@ public class HunanTVCrawler extends BreadthCrawler {
 	}
 
 	public static void main(String[] args) throws Exception {
-		int i=10;
+		int i=5;
 		while(i>0){
 		HunanTVCrawler crawler = new HunanTVCrawler("crawl", true,i);
 		crawler.setThreads(50);
@@ -181,13 +182,15 @@ public class HunanTVCrawler extends BreadthCrawler {
 		crawler.start(4);
 		i--;
 		}
-		for(Vodinfo v:result){
+		DBUtil DBUtil =new DBUtil();
+		for (Vodinfo v : result) {
 			try {
-				createSQL(v);
+				DBUtil.exesql(v.toString());
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
+		DBUtil.close();
 	}
 
 	public static void createSQL(Vodinfo v) throws Exception {

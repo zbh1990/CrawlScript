@@ -198,6 +198,7 @@ public class pptvcartoonCrawler extends BreadthCrawler {
 				e.printStackTrace();
 			}
 		}
+		DBUtil.close();
 	}
 
 	public static void createSQL(Vodinfo v) throws Exception {

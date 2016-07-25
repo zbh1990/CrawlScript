@@ -26,10 +26,11 @@ import cn.edu.hfut.dmic.webcollector.util.FileUtils;
  *
  * @author hu
  */
-public class NewsCrawler extends BreadthCrawler {
+public class youkuCrawler extends BreadthCrawler {
 
 	public static Map<String, String> t = new HashMap<String, String>();
 	public static List<Vodinfo> result =new  ArrayList<Vodinfo>();
+	public static DBUtil dbutil =new DBUtil();
 
 	static {
 		t.put("电影", "1");
@@ -57,10 +58,11 @@ public class NewsCrawler extends BreadthCrawler {
 	 *            if autoParse is true,BreadthCrawler will auto extract links
 	 *            which match regex rules from pag
 	 */
-	public NewsCrawler(String crawlPath, boolean autoParse,int id) {
+	public youkuCrawler(String crawlPath, boolean autoParse,int id) {
 		super(crawlPath, autoParse);
 		/* start page */
-		this.addSeed("http://list.youku.com/category/show/c_97_a_韩国_s_1_d_1_p_"+id+".html");//电视剧
+		//
+		this.addSeed("http://list.youku.com/category/show/c_97_a_香港_s_1_d_1_p_"+id+".html");//电视剧
 		//this.addSeed("http://list.youku.com/category/show/c_100_s_1_d_1_p_"+id+".html")
 		
 
@@ -111,6 +113,7 @@ public class NewsCrawler extends BreadthCrawler {
 		}
 
 		if (page.matchUrl("http://www.youku.com/show_page/id_.*html")) {
+			try {
 			/* we use jsoup to parse page */
 			Document doc = page.getDoc();
 			Vodinfo v = new Vodinfo();
@@ -121,7 +124,7 @@ public class NewsCrawler extends BreadthCrawler {
 			String smalltype = page.select(".type").get(1).attr("title");
 			String title = page.select(".name").text();
 			String img = page.select(".thumb").get(0).childNodes().get(0).attr("src");
-			v.setBigtype("14");
+			v.setBigtype("13");
 			v.setSmalltype(smalltype);
 			v.setTitle(title);
 			v.setImg(img);
@@ -132,6 +135,7 @@ public class NewsCrawler extends BreadthCrawler {
 			v.setScore(page.select(".num").get(0).childNode(0).outerHtml());
 			v.setImglide("");
 			v.setPlayer("youku");
+			v.setHits(999);
 			if (page.select(".short").get(0).childNodes().size() > 1) {
 				v.setDesc(page.select(".short").get(0).childNode(1).outerHtml());
 			}
@@ -154,8 +158,8 @@ public class NewsCrawler extends BreadthCrawler {
 				s_url = s_url.substring(0, s_url.length() - 1);
 				v.setUrl(s_url);
 			}
-			try {
-				result.add(v);
+			
+				dbutil.exesql(v.toString());
 				//createSQL(v);
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -174,9 +178,9 @@ public class NewsCrawler extends BreadthCrawler {
 	}
 
 	public static void main(String[] args) throws Exception {
-		int i=2;
+		int i=10;
 		while(i>0){
-		NewsCrawler crawler = new NewsCrawler("crawl", true,i);
+		youkuCrawler crawler = new youkuCrawler("crawl", true,i);
 		crawler.setThreads(50);
 		crawler.setTopN(100);
 		// crawler.setResumable(true);
@@ -184,13 +188,15 @@ public class NewsCrawler extends BreadthCrawler {
 		crawler.start(4);
 		i--;
 		}
-		for(Vodinfo v:result){
+		
+		/*for (Vodinfo v : result) {
 			try {
-				createSQL(v);
+				DBUtil.exesql(v.toString());
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-		}
+		}*/
+		dbutil.close();
 	}
 
 	public static void createSQL(Vodinfo v) throws Exception {
