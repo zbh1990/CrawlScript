@@ -180,7 +180,7 @@ public class pptvcartoonCrawler extends BreadthCrawler {
 	}
 
 	public static void main(String[] args) throws Exception {
-		int i = 10;
+		int i = 2;
 		while (i > 0) {
 			pptvcartoonCrawler crawler = new pptvcartoonCrawler("crawl", true, i);
 			crawler.setThreads(50);

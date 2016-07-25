@@ -8,10 +8,10 @@ import java.sql.SQLException;
 
 
 public class DBUtil {  
-    public static final String url = "jdbc:mysql://114.55.10.138/1bqs?characterEncoding=GBK";  
+    public static final String url = "jdbc:mysql://127.0.0.1/1bqs?characterEncoding=GBK";  
     public static final String name = "com.mysql.jdbc.Driver";  
     public static final String user = "root";  
-    public static final String password = "zcy1993";  
+    public static final String password = "root";  
   
     public static Connection conn = null;  
    

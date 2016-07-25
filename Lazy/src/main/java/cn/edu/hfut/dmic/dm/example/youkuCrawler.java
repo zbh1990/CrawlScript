@@ -62,7 +62,7 @@ public class youkuCrawler extends BreadthCrawler {
 		super(crawlPath, autoParse);
 		/* start page */
 		//
-		this.addSeed("http://list.youku.com/category/show/c_97_a_香港_s_1_d_1_p_"+id+".html");//电视剧
+		this.addSeed("http://list.youku.com/category/show/c_97_a_韩国_s_1_d_1_p_"+id+".html");//电视剧
 		//this.addSeed("http://list.youku.com/category/show/c_100_s_1_d_1_p_"+id+".html")
 		
 
@@ -178,7 +178,7 @@ public class youkuCrawler extends BreadthCrawler {
 	}
 
 	public static void main(String[] args) throws Exception {
-		int i=10;
+		int i=3;
 		while(i>0){
 		youkuCrawler crawler = new youkuCrawler("crawl", true,i);
 		crawler.setThreads(50);
