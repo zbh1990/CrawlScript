@@ -31,7 +31,7 @@ public class pptvcartoonCrawler extends BreadthCrawler {
 
 	public static Map<String, String> t = new HashMap<String, String>();
 	public static List<Vodinfo> result = new ArrayList<Vodinfo>();
-
+	public static DBUtil dbutil =new DBUtil();
 	static {
 		t.put("电影", "1");
 		t.put("电视剧", "2");
@@ -92,12 +92,15 @@ public class pptvcartoonCrawler extends BreadthCrawler {
 				String playinfo = GetIpAddress.getInfo(playinfourl, 5000);
 				JSONArray playinfoList = new JSONObject(playinfo).getJSONObject("data").getJSONArray("list");
 				StringBuffer urllist = new StringBuffer();
+				String needpay = "";
 				for (int i = 0; i < playinfoList.length(); i++) {
 					JSONObject urlinfo = (JSONObject) playinfoList.get(i);
 
 					urllist.append(urlinfo.getString("epTitle") + "$" + urlinfo.getString("url"));
 					urllist.append("#");
+					needpay=urlinfo.getString("epTitle");
 				}
+				v.setNeedpay("第"+needpay+"集");
 				String s_url = urllist.toString();
 				s_url = s_url.substring(0, s_url.length() - 1 > 0 ? s_url.length() - 1 : 0);
 				v.setUrl(s_url);
@@ -151,7 +154,7 @@ public class pptvcartoonCrawler extends BreadthCrawler {
 				//
 				// Elements typenode = page.select(".crumbs>a");
 				// String type
-				result.add(v);
+				dbutil.exesql(v.toString());
 				// createSQL(v);
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -190,15 +193,7 @@ public class pptvcartoonCrawler extends BreadthCrawler {
 			crawler.start(4);
 			i--;
 		}
-		DBUtil DBUtil =new DBUtil();
-		for (Vodinfo v : result) {
-			try {
-				DBUtil.exesql(v.toString());
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-		DBUtil.close();
+		dbutil.close();
 	}
 
 	public static void createSQL(Vodinfo v) throws Exception {
