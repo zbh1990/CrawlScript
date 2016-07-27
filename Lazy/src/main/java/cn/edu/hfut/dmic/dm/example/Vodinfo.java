@@ -21,13 +21,15 @@ public class Vodinfo {
 	private String player;
 	private int hits;
 	private String needpay="";
+	//类型
+	private String vclass="";
 
 	@Override
 	public String toString() {
 		return "INSERT INTO `mac_vod` ( `d_name`, `d_subname`, `d_enname`, `d_letter`, `d_color`, `d_pic`, `d_picthumb`, `d_picslide`, `d_starring`, `d_directed`, `d_tag`, `d_remarks`, `d_area`, `d_lang`, `d_year`, `d_type`, `d_type_expand`, `d_class`, `d_topic`, `d_hide`, `d_lock`, `d_state`, `d_level`, `d_usergroup`, `d_stint`, `d_stintdown`, `d_hits`, `d_dayhits`, `d_weekhits`, `d_monthhits`, `d_duration`, `d_up`, `d_down`, `d_score`, `d_scoreall`, `d_scorenum`, `d_addtime`, `d_time`, `d_hitstime`, `d_maketime`, `d_content`, `d_playfrom`, `d_playserver`, `d_playnote`, `d_playurl`, `d_downfrom`, `d_downserver`, `d_downnote`, `d_downurl`) VALUES ('"
 				+ title + "', '', 'niuyueheibang', 'N', '', '" + img + "', '"+imglide+"', '"+imglide+"', '" + acteres + "', '" + director
 				+ "', '" + smalltype + "', '"+needpay+"', '" + area + "', '', " + year + ", " + bigtype
-				+ ", '', '', '0', 0, 0, 0, 0, 0, 0, 0, " + hits + ", 0, 5, 209, 0, 0, 0, 7.0, 2394, 342, "
+				+ ", '', '"+vclass+"', '0', 0, 0, 0, 0, 0, 0, 0, " + hits + ", 0, 5, 209, 0, 0, 0, 7.0, 2394, 342, "
 				+ System.currentTimeMillis() / 1000 + ", " + System.currentTimeMillis() / 1000 + ", "
 				+ System.currentTimeMillis() / 1000 + ", 0, '" + desc + "', '" + player + "', '0', '', '" + url
 				+ "', '', '', '', '')ON DUPLICATE KEY UPDATE   d_playfrom='" + player + "',  d_time="
@@ -36,6 +38,20 @@ public class Vodinfo {
 
 	
 	
+
+	public String getVclass() {
+		return vclass;
+	}
+
+
+
+
+	public void setVclass(String vclass) {
+		this.vclass = vclass;
+	}
+
+
+
 
 	public String getNeedpay() {
 		return needpay;
