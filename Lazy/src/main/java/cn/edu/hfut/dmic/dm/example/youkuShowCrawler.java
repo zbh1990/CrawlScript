@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.jsoup.helper.StringUtil;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -22,14 +23,16 @@ import cn.edu.hfut.dmic.webcollector.plugin.berkeley.BreadthCrawler;
 import cn.edu.hfut.dmic.webcollector.util.FileUtils;
 
 /**
- * Crawling news from hfut news
+ * 综艺
+ * 
+ * @author Administrator
  *
- * @author hu
  */
-public class youkuCrawler extends BreadthCrawler {
+public class youkuShowCrawler extends BreadthCrawler {
 
 	public static Map<String, String> t = new HashMap<String, String>();
 	public static List<Vodinfo> result = new ArrayList<Vodinfo>();
+	public static Map<String, Vodinfo> infomap = new HashMap<String, Vodinfo>();
 	public static DBUtil dbutil = new DBUtil();
 
 	static {
@@ -58,11 +61,11 @@ public class youkuCrawler extends BreadthCrawler {
 	 *            if autoParse is true,BreadthCrawler will auto extract links
 	 *            which match regex rules from pag
 	 */
-	public youkuCrawler(String crawlPath, boolean autoParse, int id) {
+	public youkuShowCrawler(String crawlPath, boolean autoParse, int id) {
 		super(crawlPath, autoParse);
 		/* start page */
 		//
-		this.addSeed("http://list.youku.com/category/show/c_97_a_大陆_s_1_d_1_p_" + id + ".html");// 电视剧
+		this.addSeed("http://list.youku.com/category/show/c_85_s_1_d_1_p_" + id + ".html");// 电视剧
 		// this.addSeed("http://list.youku.com/category/show/c_100_s_1_d_1_p_"+id+".html")
 
 		/* fetch url like http://news.hfut.edu.cn/show-xxxxxxhtml */
@@ -75,91 +78,74 @@ public class youkuCrawler extends BreadthCrawler {
 
 	@Override
 	public void visit(Page page, CrawlDatums next) {
+
+		if (page.matchUrl("http://list.youku.com/category/show/c_85_.*html")) {
+			Elements elements = page.select(".yk-pack.pack-film");
+			for (Element node : elements) {
+				try {
+					String key = node.select(".p-thumb").get(0).childNodes().get(0).attr("href");
+					String img = StringUtils.substringBetween(
+							node.select(".p-thumb").get(0).childNodes().get(2).toString(), "src=\"", "\"");
+					Vodinfo v = new Vodinfo();
+					v.setImg(img);
+					v.setActeres(node.select(".info-list").select(".actor").text());
+					v.setTitle(node.select(".info-list").select(".title").text());
+					v.setScore("");
+					v.setNeedpay(node.select(".status.hover-hide").text());
+					infomap.put(key, v);
+				} catch (Exception e) {
+					e.printStackTrace();
+					break;
+				}
+			}
+
+		}
 		/* if page is news page */
 		if (page.matchUrl("http://v.youku.com/v_show/id.*html")) {
-			/* we use jsoup to parse page */
-			Document doc = page.getDoc();
-
-			/* extract title and content of news by css selector */
-			/*
-			 * Elements nodes = page.select(".item>a"); String title =
-			 * page.select(".title>a").text();
-			 */
-			String nexturl = page.select(".title>a").attr("href");
-
-			next.add(nexturl);
-		}
-
-		if (page.matchUrl("http://www.youku.com/show_page/id_.*html")) {
 			try {
 				/* we use jsoup to parse page */
 				Document doc = page.getDoc();
-				Vodinfo v = new Vodinfo();
-
-				/* extract title and content of news by css selector */
-
-				String bigtype = page.select(".type").get(0).childNodes().get(0).childNode(0).outerHtml();
-				String smalltype = page.select(".type").get(1).attr("title");
-				String title = page.select(".name").text();
-				String img = page.select(".thumb").get(0).childNodes().get(0).attr("src");
-				v.setBigtype("13");
-				v.setSmalltype(smalltype);
-				v.setTitle(title);
-				v.setImg(img);
-				v.setArea(page.select(".area>a").text());
-				v.setYear(page.select(".pub").get(0).childNodes().get(0).toString());
-				v.setActeres(page.select(".actor").get(0).attr("title"));
-				v.setDirector(page.select(".director").get(0).attr("title"));
-				v.setScore(page.select(".num").get(0).childNode(0).outerHtml());
+				Vodinfo v = infomap.get(page.getUrl());
+				v.setBigtype("3");
+				v.setSmalltype("");
+				v.setArea("大陆");
+				v.setYear("2016");
+				v.setDirector("");
+				v.setScore("");
 				v.setImglide("");
 				v.setPlayer("youku");
 				v.setHits(999);
-				if (page.select(".short").get(0).childNodes().size() > 1) {
-					v.setDesc(page.select(".short").get(0).childNode(1).outerHtml());
-				}
-				//
-				// Elements typenode = page.select(".crumbs>a");
-				// String type
-				if (page.select(".item").size() > 3) {
-					Elements nodes = page.select(".coll_10>ul>li>a");
-					StringBuffer urllist = new StringBuffer();
-					for (Element node : nodes) {
-						String URL = node.attr("href");
-						String num = node.attr("title");
-						if (StringUtil.isBlank(URL)) {
-							break;
-						}
-						urllist.append(num + "$" + URL);
-						urllist.append("#");
+				v.setDesc("");
+				Elements showlists = page.select(".showlists");
+				Elements playlists = showlists.select(".A");
+				StringBuffer urllist = new StringBuffer();
+				for (Element node : playlists) {
+					String URL = node.attr("href");
+					String num = node.select(".headline").text();
+					if (StringUtil.isBlank(URL)||URL.indexOf("http")<0) {
+						continue;
 					}
-					String s_url = urllist.toString();
-					s_url = s_url.substring(0, s_url.length() - 1);
-					v.setUrl(s_url);
+					urllist.append(num + "$" + URL);
+					urllist.append("#");
 				}
+				String s_url = urllist.toString();
+				s_url = s_url.substring(0, s_url.length() - 1);
+				v.setUrl(s_url);
 
 				dbutil.exesql(v.toString());
 				// createSQL(v);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			// System.out.println(v);
-			/* If you want to add urls to crawl,add them to nextLink */
-			/*
-			 * WebCollector automatically filters links that have been fetched
-			 * before
-			 */
-			/*
-			 * If autoParse is true and the link you add to nextLinks does not
-			 * match the regex rules,the link will also been filtered.
-			 */
+
 		}
 	}
 
 	public static void main(String[] args) throws Exception {
-		int i = 2;
+		int i = 10;
 		while (i > 0) {
-			youkuCrawler crawler = new youkuCrawler("crawl", true, i);
-			crawler.setThreads(50);
+			youkuShowCrawler crawler = new youkuShowCrawler("crawl", true, i);
+			crawler.setThreads(5);
 			crawler.setTopN(100);
 			// crawler.setResumable(true);
 			/* start crawl with depth of 4 */
@@ -173,11 +159,10 @@ public class youkuCrawler extends BreadthCrawler {
 		 */
 		dbutil.close();
 	}
-
 	public static void execute(int pagesize) throws Exception {
 		int i = pagesize;
 		while (i > 0) {
-			youkuCrawler crawler = new youkuCrawler("crawl", true, i);
+			youkuShowCrawler crawler = new youkuShowCrawler("crawl", true, i);
 			crawler.setThreads(5);
 			crawler.setTopN(100);
 			// crawler.setResumable(true);

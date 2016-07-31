@@ -90,17 +90,6 @@ public class LetvCrawler extends BreadthCrawler {
 			 */
 			String nexturl = page.select(".more").get(0).attr("href");
 			//
-			/*
-			 * Elements typenode = page.select(".crumbs>a"); //String type
-			 * page.select(".title>a").text();
-			 * System.out.println("--------------title:\n" + title);
-			 * StringBuffer urllist = new StringBuffer(); for (Element node :
-			 * nodes) { String URL = node.attr("href"); String num =
-			 * node.childNode(1).childNodes().get(0).outerHtml();
-			 * urllist.append(num + "&" + URL); urllist.append("#"); } String
-			 * s_url = urllist.toString(); s_url =
-			 * s_url.substring(s_url.length()-1); System.out.println(s_url);
-			 */
 			/* If you want to add urls to crawl,add them to nextLink */
 			/*
 			 * WebCollector automatically filters links that have been fetched
@@ -184,16 +173,6 @@ public class LetvCrawler extends BreadthCrawler {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			// System.out.println(v);
-			/* If you want to add urls to crawl,add them to nextLink */
-			/*
-			 * WebCollector automatically filters links that have been fetched
-			 * before
-			 */
-			/*
-			 * If autoParse is true and the link you add to nextLinks does not
-			 * match the regex rules,the link will also been filtered.
-			 */
 		}
 	}
 
@@ -201,7 +180,30 @@ public class LetvCrawler extends BreadthCrawler {
 		int i = 5;
 		while (i > 0) {
 			LetvCrawler crawler = new LetvCrawler("crawl", true, i);
-			crawler.setThreads(50);
+			crawler.setThreads(5);
+			crawler.setTopN(100);
+			// crawler.setResumable(true);
+			/* start crawl with depth of 4 */
+			crawler.start(4);
+			i--;
+		}
+		DBUtil DBUtil =new DBUtil();
+		for (Vodinfo v : result) {
+			try {
+				DBUtil.exesql(v.toString());
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		DBUtil.close();
+	}
+	
+	
+	public static void execute(int  pagesize) throws Exception {
+		int i = pagesize;
+		while (i > 0) {
+			LetvCrawler crawler = new LetvCrawler("crawl", true, i);
+			crawler.setThreads(5);
 			crawler.setTopN(100);
 			// crawler.setResumable(true);
 			/* start crawl with depth of 4 */
@@ -241,7 +243,6 @@ public class LetvCrawler extends BreadthCrawler {
 		Date date = new Date();
 		DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		String time = format.format(date);
-		System.out.println(time);
 		File f = new File("sql/" + time + ".sql");
 		if (!f.exists()) {
 			f.createNewFile();
@@ -251,15 +252,5 @@ public class LetvCrawler extends BreadthCrawler {
 		}
 
 	}
-	/*
-	 * public static void main(String[] args) throws IOException { String
-	 * info=GetIpAddress.getInfo(
-	 * "http://v.api.mgtv.com/player/video?retry=1&video_id=1054753.html",
-	 * 5000); JSONObject j= new JSONObject(info);
-	 * System.out.println(j.getJSONObject("data").getJSONObject("info").
-	 * getString("thumb"));;
-	 * 
-	 * }
-	 */
 
 }

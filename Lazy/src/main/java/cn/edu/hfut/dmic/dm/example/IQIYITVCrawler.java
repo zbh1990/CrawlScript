@@ -134,21 +134,11 @@ public class IQIYITVCrawler extends BreadthCrawler {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			// System.out.println(v);
-			/* If you want to add urls to crawl,add them to nextLink */
-			/*
-			 * WebCollector automatically filters links that have been fetched
-			 * before
-			 */
-			/*
-			 * If autoParse is true and the link you add to nextLinks does not
-			 * match the regex rules,the link will also been filtered.
-			 */
 		}
 	}
 
-	public static void main(String[] args) throws Exception {
-		int i = 1;
+	public static void execute(int pagesize) throws Exception {
+		int i = pagesize;
 		while (i > 0) {
 			IQIYITVCrawler crawler = new IQIYITVCrawler("crawl", true, i);
 			crawler.setThreads(50);
@@ -160,6 +150,7 @@ public class IQIYITVCrawler extends BreadthCrawler {
 		}
 		dbutil.close();
 	}
+	
 
 	public static void createSQL(Vodinfo v) throws Exception {
 		// INSERT INTO `mac_vod` (`d_id`, `d_name`, `d_subname`, `d_enname`,
@@ -183,7 +174,6 @@ public class IQIYITVCrawler extends BreadthCrawler {
 		Date date = new Date();
 		DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		String time = format.format(date);
-		System.out.println(time);
 		File f = new File("sql/" + time + ".sql");
 		if (!f.exists()) {
 			f.createNewFile();
@@ -193,15 +183,5 @@ public class IQIYITVCrawler extends BreadthCrawler {
 		}
 
 	}
-	/*
-	 * public static void main(String[] args) throws IOException { String
-	 * info=GetIpAddress.getInfo(
-	 * "http://v.api.mgtv.com/player/video?retry=1&video_id=1054753.html",
-	 * 5000); JSONObject j= new JSONObject(info);
-	 * System.out.println(j.getJSONObject("data").getJSONObject("info").
-	 * getString("thumb"));;
-	 * 
-	 * }
-	 */
 
 }

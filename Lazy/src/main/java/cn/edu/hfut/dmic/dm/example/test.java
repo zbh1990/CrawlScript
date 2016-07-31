@@ -43,9 +43,6 @@ public class test extends BreadthCrawler {
         String title = page.select("div[id=Article]>h2").first().text();
         String content = page.select("div#artibody", 0).text();
 
-        System.out.println("URL:\n" + url);
-        System.out.println("title:\n" + title);
-        System.out.println("content:\n" + content);
 
         /*If you want to add urls to crawl,add them to nextLink*/
         /*WebCollector automatically filters links that have been fetched before*/

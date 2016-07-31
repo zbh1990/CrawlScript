@@ -148,7 +148,6 @@ public class pptvcartoonCrawler extends BreadthCrawler {
 				}
 				String imgurl =page.select(".btn_more").get(0).attr("href");
 				String detailbody = GetIpAddress.getInfo(imgurl, 5000);
-				System.out.println(detailbody);
 				String img = StringUtils.substringBetween(detailbody, "data-src2=\"", "\"");
 				v.setImg(img);
 				//
@@ -159,16 +158,6 @@ public class pptvcartoonCrawler extends BreadthCrawler {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			// System.out.println(v);
-			/* If you want to add urls to crawl,add them to nextLink */
-			/*
-			 * WebCollector automatically filters links that have been fetched
-			 * before
-			 */
-			/*
-			 * If autoParse is true and the link you add to nextLinks does not
-			 * match the regex rules,the link will also been filtered.
-			 */
 		}
 		
 	}
@@ -182,6 +171,20 @@ public class pptvcartoonCrawler extends BreadthCrawler {
 		return result;
 	}
 
+	public static void execute(int  pagesize) throws Exception {
+		int i = pagesize;
+		while (i > 0) {
+			pptvcartoonCrawler crawler = new pptvcartoonCrawler("crawl", true, i);
+			crawler.setThreads(50);
+			crawler.setTopN(100);
+			// crawler.setResumable(true);
+			/* start crawl with depth of 4 */
+			crawler.start(4);
+			i--;
+		}
+		dbutil.close();
+	}
+	
 	public static void main(String[] args) throws Exception {
 		int i = 2;
 		while (i > 0) {
@@ -218,7 +221,6 @@ public class pptvcartoonCrawler extends BreadthCrawler {
 		Date date = new Date();
 		DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		String time = format.format(date);
-		System.out.println(time);
 		File f = new File("sql/" + time + ".sql");
 		if (!f.exists()) {
 			f.createNewFile();
@@ -228,15 +230,5 @@ public class pptvcartoonCrawler extends BreadthCrawler {
 		}
 
 	}
-	/*
-	 * public static void main(String[] args) throws IOException { String
-	 * info=GetIpAddress.getInfo(
-	 * "http://v.api.mgtv.com/player/video?retry=1&video_id=1054753.html",
-	 * 5000); JSONObject j= new JSONObject(info);
-	 * System.out.println(j.getJSONObject("data").getJSONObject("info").
-	 * getString("thumb"));;
-	 * 
-	 * }
-	 */
 
 }
