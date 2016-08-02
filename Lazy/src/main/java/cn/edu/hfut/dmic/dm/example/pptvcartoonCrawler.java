@@ -31,7 +31,7 @@ public class pptvcartoonCrawler extends BreadthCrawler {
 
 	public static Map<String, String> t = new HashMap<String, String>();
 	public static List<Vodinfo> result = new ArrayList<Vodinfo>();
-	public static DBUtil dbutil =new DBUtil();
+	public static DBUtil dbutil = DBUtil.getInstance();
 	static {
 		t.put("电影", "1");
 		t.put("电视剧", "2");
@@ -182,7 +182,6 @@ public class pptvcartoonCrawler extends BreadthCrawler {
 			crawler.start(4);
 			i--;
 		}
-		dbutil.close();
 	}
 	
 	public static void main(String[] args) throws Exception {
@@ -196,7 +195,6 @@ public class pptvcartoonCrawler extends BreadthCrawler {
 			crawler.start(4);
 			i--;
 		}
-		dbutil.close();
 	}
 
 	public static void createSQL(Vodinfo v) throws Exception {

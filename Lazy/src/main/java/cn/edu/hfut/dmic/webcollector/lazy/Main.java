@@ -65,50 +65,50 @@ public class Main {
 
 		// PPtvJob 将每天0点执行一次
 		JobDetail job = newJob(PPtvJob.class).withIdentity("PPtvJob", "group1").build();
-		CronTrigger trigger = newTrigger().withIdentity("trigger1", "group1").withSchedule(cronSchedule("0 0 0 * * ?")).build();
+		CronTrigger trigger = newTrigger().withIdentity("trigger1", "group1").withSchedule(cronSchedule("0 0 0,1,2,3,4,5,6,7,8,9,10,11 * * ?")).build();
 		Date ft = sched.scheduleJob(job, trigger);
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss SSS");
 		System.out.println(job.getKey() + " 已被安排执行于: " + sdf.format(ft) + "，并且以如下重复规则重复执行: " + trigger.getCronExpression());
 
 		// LetvdmJob 将每天0：15点执行一次
 		job = newJob(LetvdmJob.class).withIdentity("LetvdmJob", "group1").build();
-		trigger = newTrigger().withIdentity("trigger2", "group1").withSchedule(cronSchedule("0 15 0 * * ?")).build();
+		trigger = newTrigger().withIdentity("trigger2", "group1").withSchedule(cronSchedule("0 5 0,1,2,3,4,5,6,7,8,9,10,11 * * ?")).build();
 		ft = sched.scheduleJob(job, trigger);
 		System.out.println(job.getKey() + " 已被安排执行于: " + sdf.format(ft) + "，并且以如下重复规则重复执行: " + trigger.getCronExpression());
 
 		// LetvJob 将每天0：30点执行一次
 		job = newJob(LetvJob.class).withIdentity("LetvJob", "group1").build();
-		trigger = newTrigger().withIdentity("trigger3", "group1").withSchedule(cronSchedule("0 30 0 * * ?")).build();
+		trigger = newTrigger().withIdentity("trigger3", "group1").withSchedule(cronSchedule("0 10 0,1,2,3,4,5,6,7,8,9,10,11 * * ?")).build();
 		ft = sched.scheduleJob(job, trigger);
 		System.out.println(job.getKey() + " 已被安排执行于: " + sdf.format(ft) + "，并且以如下重复规则重复执行: " + trigger.getCronExpression());
 
 		// hunantv 将每天0：45点执行一次
 		job = newJob(HunnanJob.class).withIdentity("HunnanJob", "group1").build();
-		trigger = newTrigger().withIdentity("trigger4", "group1").withSchedule(cronSchedule("0 45 0 * * ?")).build();
+		trigger = newTrigger().withIdentity("trigger4", "group1").withSchedule(cronSchedule("0 15 0,1,2,3,4,5,6,7,8,9,10,11 * * ?")).build();
 		ft = sched.scheduleJob(job, trigger);
 		System.out.println(job.getKey() + " 已被安排执行于: " + sdf.format(ft) + "，并且以如下重复规则重复执行: " + trigger.getCronExpression());
 
 		// Iqiyi 将每天0：45点执行一次
 		job = newJob(IQIYItvJob.class).withIdentity("Iqiyi", "group1").build();
-		trigger = newTrigger().withIdentity("trigger5", "group1").withSchedule(cronSchedule("0 0 1 * * ?")).build();
+		trigger = newTrigger().withIdentity("trigger5", "group1").withSchedule(cronSchedule("0 20 1,1,2,3,4,5,6,7,8,9,10,11 * * ?")).build();
 		ft = sched.scheduleJob(job, trigger);
 		System.out.println(job.getKey() + " 已被安排执行于: " + sdf.format(ft) + "，并且以如下重复规则重复执行: " + trigger.getCronExpression());
 
 		// youku 将每天0：45点执行一次
 		job = newJob(youKuJob.class).withIdentity("youKuJob", "group1").build();
-		trigger = newTrigger().withIdentity("trigger6", "group1").withSchedule(cronSchedule("0 15 1 * * ?")).build();
+		trigger = newTrigger().withIdentity("trigger6", "group1").withSchedule(cronSchedule("0 25 1,1,2,3,4,5,6,7,8,9,10,11 * * ?")).build();
 		ft = sched.scheduleJob(job, trigger);
 		System.out.println(job.getKey() + " 已被安排执行于: " + sdf.format(ft) + "，并且以如下重复规则重复执行: " + trigger.getCronExpression());
 
 		// youkushow 将每天0：45点执行一次
 		job = newJob(youKuShowJob.class).withIdentity("youKuShowJob", "group1").build();
-		trigger = newTrigger().withIdentity("trigger7", "group1").withSchedule(cronSchedule("0 30 1 * * ?")).build();
+		trigger = newTrigger().withIdentity("trigger7", "group1").withSchedule(cronSchedule("0 30 1,1,2,3,4,5,6,7,8,9,10,11 * * ?")).build();
 		ft = sched.scheduleJob(job, trigger);
 		System.out.println(job.getKey() + " 已被安排执行于: " + sdf.format(ft) + "，并且以如下重复规则重复执行: " + trigger.getCronExpression());
 		
 		// qq 将每天1：45点执行一次
 		job = newJob(QQtvJob.class).withIdentity("QQtvJob", "group1").build();
-		trigger = newTrigger().withIdentity("trigger8", "group1").withSchedule(cronSchedule("0 45 1 * * ?")).build();
+		trigger = newTrigger().withIdentity("trigger8", "group1").withSchedule(cronSchedule("0 45 1,1,2,3,4,5,6,7,8,9,10,11 * * ?")).build();
 		ft = sched.scheduleJob(job, trigger);
 		System.out.println(job.getKey() + " 已被安排执行于: " + sdf.format(ft) + "，并且以如下重复规则重复执行: " + trigger.getCronExpression());
 

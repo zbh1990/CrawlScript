@@ -33,7 +33,7 @@ public class IQIYITVCrawler extends BreadthCrawler {
 	public static Map<String, String> t = new HashMap<String, String>();
 	public static List<Vodinfo> result = new ArrayList<Vodinfo>();
 	public static String needvodnames = "老九门";
-	public static DBUtil dbutil = new DBUtil();
+	public static DBUtil dbutil =DBUtil.getInstance();
 	static {
 		t.put("电影", "1");
 		t.put("电视剧", "2");
@@ -148,7 +148,6 @@ public class IQIYITVCrawler extends BreadthCrawler {
 			crawler.start(4);
 			i--;
 		}
-		dbutil.close();
 	}
 	
 

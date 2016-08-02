@@ -14,9 +14,9 @@ public class DBUtil {
     public static final String password = "root";  
   
     public static Connection conn = null;  
-   
+    private static DBUtil uniqueInstance = null;
   
-    public  DBUtil() {  
+    private  DBUtil() {  
         try {  
             Class.forName(name);//指定连接类型  
             conn = DriverManager.getConnection(url, user, password);//获取连接  
@@ -24,6 +24,12 @@ public class DBUtil {
             e.printStackTrace();  
         }  
     }  
+    public synchronized   static DBUtil getInstance() {
+        if (uniqueInstance == null) {
+            uniqueInstance = new DBUtil();
+        }
+        return uniqueInstance;
+     }
   
     public static void exesql(String sql) {  
     	  PreparedStatement pst = null;  
@@ -34,7 +40,7 @@ public class DBUtil {
             e.printStackTrace();  
         }  
     }  
-    public void close() {  
+    private void close() {  
         try {  
             this.conn.close();  
         } catch (SQLException e) {  

@@ -33,7 +33,7 @@ public class youkuShowCrawler extends BreadthCrawler {
 	public static Map<String, String> t = new HashMap<String, String>();
 	public static List<Vodinfo> result = new ArrayList<Vodinfo>();
 	public static Map<String, Vodinfo> infomap = new HashMap<String, Vodinfo>();
-	public static DBUtil dbutil = new DBUtil();
+	public static DBUtil dbutil = DBUtil.getInstance();
 
 	static {
 		t.put("电影", "1");
@@ -157,7 +157,6 @@ public class youkuShowCrawler extends BreadthCrawler {
 		 * for (Vodinfo v : result) { try { DBUtil.exesql(v.toString()); } catch
 		 * (Exception e) { e.printStackTrace(); } }
 		 */
-		dbutil.close();
 	}
 	public static void execute(int pagesize) throws Exception {
 		int i = pagesize;
@@ -175,7 +174,6 @@ public class youkuShowCrawler extends BreadthCrawler {
 		 * for (Vodinfo v : result) { try { DBUtil.exesql(v.toString()); } catch
 		 * (Exception e) { e.printStackTrace(); } }
 		 */
-		dbutil.close();
 	}
 
 	public static void createSQL(Vodinfo v) throws Exception {

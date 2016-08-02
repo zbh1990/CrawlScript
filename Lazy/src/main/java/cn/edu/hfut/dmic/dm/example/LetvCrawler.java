@@ -187,7 +187,7 @@ public class LetvCrawler extends BreadthCrawler {
 			crawler.start(4);
 			i--;
 		}
-		DBUtil DBUtil =new DBUtil();
+		DBUtil dbUtil =DBUtil.getInstance();
 		for (Vodinfo v : result) {
 			try {
 				DBUtil.exesql(v.toString());
@@ -195,7 +195,6 @@ public class LetvCrawler extends BreadthCrawler {
 				e.printStackTrace();
 			}
 		}
-		DBUtil.close();
 	}
 	
 	
@@ -210,7 +209,7 @@ public class LetvCrawler extends BreadthCrawler {
 			crawler.start(4);
 			i--;
 		}
-		DBUtil DBUtil =new DBUtil();
+		DBUtil dbUtil =DBUtil.getInstance();
 		for (Vodinfo v : result) {
 			try {
 				DBUtil.exesql(v.toString());
@@ -218,7 +217,6 @@ public class LetvCrawler extends BreadthCrawler {
 				e.printStackTrace();
 			}
 		}
-		DBUtil.close();
 	}
 
 	public static void createSQL(Vodinfo v) throws Exception {

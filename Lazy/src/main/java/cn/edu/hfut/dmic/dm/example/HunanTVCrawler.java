@@ -172,7 +172,7 @@ public class HunanTVCrawler extends BreadthCrawler {
 		crawler.start(4);
 		i--;
 		}
-		DBUtil DBUtil =new DBUtil();
+		DBUtil dbutil =DBUtil.getInstance();
 		for (Vodinfo v : result) {
 			try {
 				DBUtil.exesql(v.toString());
@@ -180,7 +180,6 @@ public class HunanTVCrawler extends BreadthCrawler {
 				e.printStackTrace();
 			}
 		}
-		DBUtil.close();
 	}
 	public static void execute(int pagesize) throws Exception {
 		int i=pagesize;
@@ -193,7 +192,7 @@ public class HunanTVCrawler extends BreadthCrawler {
 		crawler.start(4);
 		i--;
 		}
-		DBUtil DBUtil =new DBUtil();
+		DBUtil dbutil =DBUtil.getInstance();
 		for (Vodinfo v : result) {
 			try {
 				DBUtil.exesql(v.toString());
@@ -201,7 +200,6 @@ public class HunanTVCrawler extends BreadthCrawler {
 				e.printStackTrace();
 			}
 		}
-		DBUtil.close();
 	}
 
 	public static void createSQL(Vodinfo v) throws Exception {
