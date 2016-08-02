@@ -30,7 +30,9 @@ import org.quartz.Scheduler;
 import org.quartz.SchedulerFactory;
 import org.quartz.impl.StdSchedulerFactory;
 
+import cn.edu.hfut.dmic.dm.example.HunanTVSOAPCrawler;
 import cn.edu.hfut.dmic.webcollector.lazy.job.HunnanJob;
+import cn.edu.hfut.dmic.webcollector.lazy.job.HunnanTVJob;
 import cn.edu.hfut.dmic.webcollector.lazy.job.IQIYItvJob;
 import cn.edu.hfut.dmic.webcollector.lazy.job.LetvJob;
 import cn.edu.hfut.dmic.webcollector.lazy.job.LetvdmJob;
@@ -109,6 +111,12 @@ public class Main {
 		// qq 将每天1：45点执行一次
 		job = newJob(QQtvJob.class).withIdentity("QQtvJob", "group1").build();
 		trigger = newTrigger().withIdentity("trigger8", "group1").withSchedule(cronSchedule("0 45 1,2,3,4,5,6,7,8,9,10,11,12,13,15,16,18,20,21,22,23 * * ?")).build();
+		ft = sched.scheduleJob(job, trigger);
+		System.out.println(job.getKey() + " 已被安排执行于: " + sdf.format(ft) + "，并且以如下重复规则重复执行: " + trigger.getCronExpression());
+		
+		// qq 将每天1：50点执行一次
+		job = newJob(HunnanTVJob.class).withIdentity("HunnanTVJob", "group1").build();
+		trigger = newTrigger().withIdentity("trigger8", "group1").withSchedule(cronSchedule("0 50 1,2,3,4,5,6,7,8,9,10,11,12,13,15,16,18,20,21,22,23 * * ?")).build();
 		ft = sched.scheduleJob(job, trigger);
 		System.out.println(job.getKey() + " 已被安排执行于: " + sdf.format(ft) + "，并且以如下重复规则重复执行: " + trigger.getCronExpression());
 
