@@ -32,7 +32,7 @@ public class LetvCrawler extends BreadthCrawler {
 
 	public static Map<String, String> t = new HashMap<String, String>();
 	public static List<Vodinfo> result = new ArrayList<Vodinfo>();
-
+	public static DBUtil dbutil =DBUtil.getInstance();
 	static {
 		t.put("电影", "1");
 		t.put("电视剧", "2");
@@ -168,7 +168,7 @@ public class LetvCrawler extends BreadthCrawler {
 				 * urllist.toString(); s_url = s_url.substring(0, s_url.length()
 				 * - 1); v.setUrl(s_url); }
 				 */
-				result.add(v);
+				dbutil.exesql(v.toString());
 				// createSQL(v);
 			} catch (Exception e) {
 				e.printStackTrace();

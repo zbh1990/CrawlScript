@@ -28,8 +28,7 @@ import cn.edu.hfut.dmic.webcollector.util.FileUtils;
 public class HunanTVCrawler extends BreadthCrawler {
 
 	public static Map<String, String> t = new HashMap<String, String>();
-	public static List<Vodinfo> result =new  ArrayList<Vodinfo>();
-
+	public static DBUtil dbutil = DBUtil.getInstance();
 	static {
 		t.put("电影", "1");
 		t.put("电视剧", "2");
@@ -55,7 +54,7 @@ public class HunanTVCrawler extends BreadthCrawler {
 	public HunanTVCrawler(String crawlPath, boolean autoParse,int id) {
 		super(crawlPath, autoParse);
 		/* start page */
-		this.addSeed("http://list.mgtv.com/3/-----0----5-"+id+"---.html");//电视剧
+		this.addSeed("http://list.mgtv.com/3/-----1----5-"+id+"---.html");//电视剧
 		
 		//this.addSeed("http://list.youku.com/category/show/c_100_s_1_d_1_p_"+id+".html")
 		
@@ -99,6 +98,7 @@ public class HunanTVCrawler extends BreadthCrawler {
 				v.setTitle(infob.getString("title"));
 			} catch (IOException e1) {
 				e1.printStackTrace();
+				return;
 			}
 			/* extract title and content of news by css selector */
 
@@ -149,13 +149,9 @@ public class HunanTVCrawler extends BreadthCrawler {
 			v.setDirector(director);
 			v.setDesc(page.select(".item.intro>span").outerHtml());
 			v.setHits(999);
-			//
-			// Elements typenode = page.select(".crumbs>a");
-			// String type
-			try {
-				result.add(v);
-				//createSQL(v);
-			} catch (Exception e) {
+			try{
+			dbutil.exesql(v.toString());
+			}catch(Exception e){
 				e.printStackTrace();
 			}
 		}
@@ -165,40 +161,24 @@ public class HunanTVCrawler extends BreadthCrawler {
 		int i=2;
 		while(i>0){
 		HunanTVCrawler crawler = new HunanTVCrawler("crawl", true,i);
-		crawler.setThreads(50);
+		crawler.setThreads(5);
 		crawler.setTopN(100);
 		// crawler.setResumable(true);
 		/* start crawl with depth of 4 */
 		crawler.start(4);
 		i--;
-		}
-		DBUtil dbutil =DBUtil.getInstance();
-		for (Vodinfo v : result) {
-			try {
-				DBUtil.exesql(v.toString());
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
 		}
 	}
 	public static void execute(int pagesize) throws Exception {
 		int i=pagesize;
 		while(i>0){
 		HunanTVCrawler crawler = new HunanTVCrawler("crawl", true,i);
-		crawler.setThreads(50);
+		crawler.setThreads(5);
 		crawler.setTopN(100);
 		// crawler.setResumable(true);
 		/* start crawl with depth of 4 */
 		crawler.start(4);
 		i--;
-		}
-		DBUtil dbutil =DBUtil.getInstance();
-		for (Vodinfo v : result) {
-			try {
-				DBUtil.exesql(v.toString());
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
 		}
 	}
 
