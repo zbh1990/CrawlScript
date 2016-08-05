@@ -32,8 +32,7 @@ import cn.edu.hfut.dmic.webcollector.util.FileUtils;
 public class HunanTVSOAPCrawler extends BreadthCrawler {
 
 	public static Map<String, String> t = new HashMap<String, String>();
-	public static List<Vodinfo> result = new ArrayList<Vodinfo>();
-	public static Map<String, Vodinfo> infomap = new HashMap<String, Vodinfo>();
+	public Map<String, Vodinfo> infomap = new HashMap<String, Vodinfo>();
 	public static DBUtil dbutil = DBUtil.getInstance();
 	static {
 		t.put("电影", "1");
@@ -199,6 +198,7 @@ public class HunanTVSOAPCrawler extends BreadthCrawler {
 			crawler.start(4);
 			i--;
 		}
+		DBUtil.getInstance().close();
 	}
 
 	public static void createSQL(Vodinfo v) throws Exception {

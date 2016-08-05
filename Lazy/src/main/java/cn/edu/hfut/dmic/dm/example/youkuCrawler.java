@@ -29,7 +29,6 @@ import cn.edu.hfut.dmic.webcollector.util.FileUtils;
 public class youkuCrawler extends BreadthCrawler {
 
 	public static Map<String, String> t = new HashMap<String, String>();
-	public static List<Vodinfo> result = new ArrayList<Vodinfo>();
 	public static DBUtil dbutil = DBUtil.getInstance();
 
 	static {
@@ -184,7 +183,7 @@ public class youkuCrawler extends BreadthCrawler {
 			crawler.start(4);
 			i--;
 		}
-
+		DBUtil.getInstance().close();
 		/*
 		 * for (Vodinfo v : result) { try { DBUtil.exesql(v.toString()); } catch
 		 * (Exception e) { e.printStackTrace(); } }

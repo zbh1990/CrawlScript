@@ -28,9 +28,8 @@ import cn.edu.hfut.dmic.webcollector.util.FileUtils;
 public class LetvDMCrawler extends BreadthCrawler {
 
 	public static Map<String, String> t = new HashMap<String, String>();
-	public static List<Vodinfo> result = new ArrayList<Vodinfo>();
-	public static Map<String,String> imgmap=new HashMap<String,String>();
-
+	public  Map<String,String> imgmap=new HashMap<String,String>();
+	public static DBUtil dbutil =DBUtil.getInstance();
 	static {
 		t.put("电影", "1");
 		t.put("电视剧", "2");
@@ -170,7 +169,7 @@ public class LetvDMCrawler extends BreadthCrawler {
 				 * urllist.toString(); s_url = s_url.substring(0, s_url.length()
 				 * - 1); v.setUrl(s_url); }
 				 */
-				result.add(v);
+				dbutil.exesql(v.toString());
 				// createSQL(v);
 			} catch (Exception e) {
 				System.out.println("url："+page.getUrl()+"error");
@@ -190,14 +189,6 @@ public class LetvDMCrawler extends BreadthCrawler {
 			crawler.start(4);
 			i--;
 		}
-		DBUtil dbUtil =DBUtil.getInstance();
-		for (Vodinfo v : result) {
-			try {
-				DBUtil.exesql(v.toString());
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
 	}
 	
 	public static void execute(int  pagesize) throws Exception {
@@ -211,14 +202,7 @@ public class LetvDMCrawler extends BreadthCrawler {
 			crawler.start(4);
 			i--;
 		}
-		DBUtil dbUtil =DBUtil.getInstance();
-		for (Vodinfo v : result) {
-			try {
-				DBUtil.exesql(v.toString());
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
+		DBUtil.getInstance().close();
 	}
 
 	public static void createSQL(Vodinfo v) throws Exception {

@@ -31,7 +31,7 @@ import cn.edu.hfut.dmic.webcollector.util.FileUtils;
 public class IQIYITVCrawler extends BreadthCrawler {
 
 	public static Map<String, String> t = new HashMap<String, String>();
-	public static List<Vodinfo> result = new ArrayList<Vodinfo>();
+	public List<Vodinfo> result = new ArrayList<Vodinfo>();
 	public static String needvodnames = "老九门";
 	public static DBUtil dbutil =DBUtil.getInstance();
 	static {
@@ -148,6 +148,7 @@ public class IQIYITVCrawler extends BreadthCrawler {
 			crawler.start(4);
 			i--;
 		}
+		DBUtil.getInstance().close();
 	}
 	
 

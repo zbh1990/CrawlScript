@@ -31,8 +31,7 @@ import cn.edu.hfut.dmic.webcollector.util.FileUtils;
 public class youkuShowCrawler extends BreadthCrawler {
 
 	public static Map<String, String> t = new HashMap<String, String>();
-	public static List<Vodinfo> result = new ArrayList<Vodinfo>();
-	public static Map<String, Vodinfo> infomap = new HashMap<String, Vodinfo>();
+	public Map<String, Vodinfo> infomap = new HashMap<String, Vodinfo>();
 	public static DBUtil dbutil = DBUtil.getInstance();
 
 	static {
@@ -169,11 +168,7 @@ public class youkuShowCrawler extends BreadthCrawler {
 			crawler.start(4);
 			i--;
 		}
-
-		/*
-		 * for (Vodinfo v : result) { try { DBUtil.exesql(v.toString()); } catch
-		 * (Exception e) { e.printStackTrace(); } }
-		 */
+		DBUtil.getInstance().close();
 	}
 
 	public static void createSQL(Vodinfo v) throws Exception {
