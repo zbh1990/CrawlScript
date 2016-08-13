@@ -114,7 +114,7 @@ public class IQIYITVCrawler extends BreadthCrawler {
 				// String type
 				Elements nodes = page.select(".site-piclist_pic_link");
 				int currentindex=Integer.parseInt(page.select(".c-999>em").get(0).childNodes().get(0).outerHtml());
-				v.setNeedpay("爱奇艺vip,更新到"+currentindex);
+				v.setNeedpay("更新到"+currentindex);
 				StringBuffer urllist = new StringBuffer();
 				for (int i=0;i<currentindex;i++) {
 					Element node = nodes.get(i);
