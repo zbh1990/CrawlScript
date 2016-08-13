@@ -180,7 +180,6 @@ public class HunanTVCrawler extends BreadthCrawler {
 		crawler.start(4);
 		i--;
 		}
-		DBUtil.getInstance().close();
 	}
 
 	public static void createSQL(Vodinfo v) throws Exception {

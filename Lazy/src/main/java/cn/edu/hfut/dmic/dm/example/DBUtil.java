@@ -13,7 +13,7 @@ public class DBUtil {
     public static final String user = "root";  
     public static final String password = "root";  
   
-    public static Connection conn = null;  
+    private  Connection conn = null;  
     private static DBUtil uniqueInstance = null;
   
     private  DBUtil() {  
@@ -28,24 +28,28 @@ public class DBUtil {
         if (uniqueInstance == null) {
             uniqueInstance = new DBUtil();
         }
+        try {
+			if(uniqueInstance.conn==null||uniqueInstance.conn.isClosed()){
+				uniqueInstance = new DBUtil();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
         return uniqueInstance;
      }
   
-    public static void exesql(String sql) {  
+    public  void exesql(String sql) {  
     	  PreparedStatement pst = null;  
         try {  
-            pst = conn.prepareStatement(sql);//准备执行语句  
+            pst = uniqueInstance.conn.prepareStatement(sql);//准备执行语句  
             pst.execute(sql);
         } catch (Exception e) {  
             e.printStackTrace();  
         }  
     }  
-    private void close() {  
-        try {  
-            this.conn.close();  
-        } catch (SQLException e) {  
-            e.printStackTrace();  
-        }  
+    public void close() {  
+        	//uniqueInstance.conn.close();  
+            //uniqueInstance=null;
     }  
 
 }
