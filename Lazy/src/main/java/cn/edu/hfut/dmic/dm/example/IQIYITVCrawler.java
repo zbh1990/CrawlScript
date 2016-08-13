@@ -141,8 +141,8 @@ public class IQIYITVCrawler extends BreadthCrawler {
 		int i = pagesize;
 		while (i > 0) {
 			IQIYITVCrawler crawler = new IQIYITVCrawler("crawl", true, i);
-			crawler.setThreads(50);
-			crawler.setTopN(100);
+			crawler.setThreads(5);
+			crawler.setTopN(10);
 			// crawler.setResumable(true);
 			/* start crawl with depth of 4 */
 			crawler.start(4);

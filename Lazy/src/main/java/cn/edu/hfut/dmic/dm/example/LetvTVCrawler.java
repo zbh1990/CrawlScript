@@ -176,7 +176,7 @@ public class LetvTVCrawler extends BreadthCrawler {
 		while (i > 0) {
 			LetvTVCrawler crawler = new LetvTVCrawler("crawl", true, i);
 			crawler.setThreads(5);
-			crawler.setTopN(100);
+			crawler.setTopN(10);
 			// crawler.setResumable(true);
 			/* start crawl with depth of 4 */
 			crawler.start(4);
@@ -185,36 +185,5 @@ public class LetvTVCrawler extends BreadthCrawler {
 		
 	}
 
-	public static void createSQL(Vodinfo v) throws Exception {
-		// INSERT INTO `mac_vod` (`d_id`, `d_name`, `d_subname`, `d_enname`,
-		// `d_letter`, `d_color`, `d_pic`, `d_picthumb`, `d_picslide`,
-		// `d_starring`, `d_directed`, `d_tag`, `d_remarks`, `d_area`, `d_lang`,
-		// `d_year`, `d_type`, `d_type_expand`, `d_class`, `d_topic`, `d_hide`,
-		// `d_lock`, `d_state`, `d_level`, `d_usergroup`, `d_stint`,
-		// `d_stintdown`, `d_hits`, `d_dayhits`, `d_weekhits`, `d_monthhits`,
-		// `d_duration`, `d_up`, `d_down`, `d_score`, `d_scoreall`,
-		// `d_scorenum`, `d_addtime`, `d_time`, `d_hitstime`, `d_maketime`,
-		// `d_content`, `d_playfrom`, `d_playserver`, `d_playnote`, `d_playurl`,
-		// `d_downfrom`, `d_downserver`, `d_downnote`, `d_downurl`) VALUES (1,
-		// '纽约黑帮', '', 'niuyueheibang', 'N', '',
-		// 'upload/vod/2016-07-19/14688604600.jpg', '', '',
-		// '莱昂纳多·迪卡普里奥,,丹尼尔·戴-刘易斯', '马丁·斯科塞斯', '阿姆斯特朗,迪卡普里奥,莱昂纳多,意大利,纽约黑帮',
-		// 'BD版', '美国', '英语', 2009, 5, '', '', '0', 0, 0, 0, 0, 0, 0, 0, 230, 0,
-		// 5, 209, 0, 0, 0, 7.0, 2394, 342, 1468709324, 1468860619, 1468861319,
-		// 0,
-		// '影片时间设定在1846到1863年间，复仇大业，他选择了暂时的忍耐和伪自己的杀父仇人。阿姆斯特朗得到了女贼珍妮-埃弗迪恩(卡梅伦-迪亚兹饰)的帮助，逐渐找到了接近“屠夫比尔”的机会，但越是接近他的内心，越是矛盾迷茫。他看清楚了“屠夫比尔”的所有罪行，他同情那些受害的人，但他却发现就算是将这个人杀死，外来移民和所有受迫害的人也不可能过上安稳日子，因为“屠夫比尔”所代表的不仅他个人和一个帮派，这个流氓政官身后有强大的政治援助。于是一个单纯的为父报仇的目的，导致了一场追求自由和平等的集体反抗。…………',
-		// 'youku', '0', '', 'BD中字$XMjAyMzA3MDU2', '', '', '', '');
-		Date date = new Date();
-		DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-		String time = format.format(date);
-		File f = new File("sql/" + time + ".sql");
-		if (!f.exists()) {
-			f.createNewFile();
-		}
-		synchronized (f) {
-			FileUtils.writeFileWithParent(f, FileUtils.readFile(f, "utf-8") + v.toString(), "utf-8");
-		}
-
-	}
 
 }
