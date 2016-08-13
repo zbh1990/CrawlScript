@@ -30,13 +30,12 @@ import org.quartz.Scheduler;
 import org.quartz.SchedulerFactory;
 import org.quartz.impl.StdSchedulerFactory;
 
-import cn.edu.hfut.dmic.dm.example.HunanTVSOAPCrawler;
 import cn.edu.hfut.dmic.webcollector.lazy.job.HunnanJob;
 import cn.edu.hfut.dmic.webcollector.lazy.job.HunnanTVJob;
 import cn.edu.hfut.dmic.webcollector.lazy.job.IQIYItvJob;
 import cn.edu.hfut.dmic.webcollector.lazy.job.LetvJob;
+import cn.edu.hfut.dmic.webcollector.lazy.job.LetvTvJob;
 import cn.edu.hfut.dmic.webcollector.lazy.job.LetvdmJob;
-import cn.edu.hfut.dmic.webcollector.lazy.job.PPtvJob;
 import cn.edu.hfut.dmic.webcollector.lazy.job.QQtvJob;
 import cn.edu.hfut.dmic.webcollector.lazy.job.youKuJob;
 import cn.edu.hfut.dmic.webcollector.lazy.job.youKuShowJob;
@@ -66,7 +65,7 @@ public class Main {
 		// jobs可以在scheduled的sched.start()方法前被调用
 
 		// PPtvJob 将每天0点执行一次
-		JobDetail job = newJob(PPtvJob.class).withIdentity("PPtvJob", "group1").build();
+		JobDetail job = newJob(LetvTvJob.class).withIdentity("LetvTvJob", "group1").build();
 		CronTrigger trigger = newTrigger().withIdentity("trigger1", "group1").withSchedule(cronSchedule("0 0 0,1,2,3,4,5,6,7,8,9,10,11,12,13,15,16,18,20,21,22,23 * * ?")).build();
 		Date ft = sched.scheduleJob(job, trigger);
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss SSS");

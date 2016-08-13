@@ -199,6 +199,7 @@ public class HunanTVSOAPCrawler extends BreadthCrawler {
 			i--;
 		}
 		DBUtil.getInstance().close();
+
 	}
 
 
