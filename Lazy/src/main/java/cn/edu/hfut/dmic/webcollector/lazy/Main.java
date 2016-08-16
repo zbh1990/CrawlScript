@@ -30,6 +30,7 @@ import org.quartz.Scheduler;
 import org.quartz.SchedulerFactory;
 import org.quartz.impl.StdSchedulerFactory;
 
+import cn.edu.hfut.dmic.webcollector.lazy.job.HanjutvJob;
 import cn.edu.hfut.dmic.webcollector.lazy.job.HunnanJob;
 import cn.edu.hfut.dmic.webcollector.lazy.job.HunnanTVJob;
 import cn.edu.hfut.dmic.webcollector.lazy.job.IQIYItvJob;
@@ -130,6 +131,12 @@ public class Main {
 
 		job = newJob(IQIYItvJob2.class).withIdentity("IQIYItvJob2", "group1").build();
 		trigger = newTrigger().withIdentity("trigger11", "group1").withSchedule(cronSchedule("0 40 1,2,3,4,5,6,7,8,9,10,11,12,13,15,16,18,20,21,22,23 * * ?")).build();
+		ft = sched.scheduleJob(job, trigger);
+		System.out.println(job.getKey() + " 已被安排执行于: " + sdf.format(ft) + "，并且以如下重复规则重复执行: " + trigger.getCronExpression());
+		
+		
+		job = newJob(HanjutvJob.class).withIdentity("HanjutvJob", "group1").build();
+		trigger = newTrigger().withIdentity("trigger12", "group1").withSchedule(cronSchedule("0 42 1,2,3,4,5,6,7,8,9,10,11,12,13,14,16,18,20,21,22,23 * * ?")).build();
 		ft = sched.scheduleJob(job, trigger);
 		System.out.println(job.getKey() + " 已被安排执行于: " + sdf.format(ft) + "，并且以如下重复规则重复执行: " + trigger.getCronExpression());
 		
