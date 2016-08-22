@@ -152,7 +152,7 @@ public class pptvcartoonCrawler extends BreadthCrawler {
 				//
 				// Elements typenode = page.select(".crumbs>a");
 				// String type
-				dbutil.exesql(v.toString());
+				dbutil.exesql(v);
 				// createSQL(v);
 			} catch (Exception e) {
 				e.printStackTrace();

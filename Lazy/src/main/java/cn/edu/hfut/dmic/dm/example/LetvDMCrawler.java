@@ -59,7 +59,7 @@ public class LetvDMCrawler extends BreadthCrawler {
 	public LetvDMCrawler(String crawlPath, boolean autoParse, int id) {
 		super(crawlPath, autoParse);
 		/* start page */
-		this.addSeed("http://list.le.com/listn/c5_t30272_a-1_y-1_vt-1_f-1_s1_lg-1_st-1_md_o20_d1_p.html");// 电影
+		this.addSeed("http://list.le.com/listn/c5_t-1_a50001_y-1_vt-1_f-1_s1_lg-1_st-1_md_o20_d1_p"+id+".html");// 电影
 
 		// this.addSeed("http://list.youku.com/category/show/c_100_s_1_d_1_p_"+id+".html")
 
@@ -99,14 +99,16 @@ public class LetvDMCrawler extends BreadthCrawler {
 				/* extract title and content of news by css selector */
 				Elements elements = page.select(".w120");
 				StringBuffer urllist = new StringBuffer();
+				int i = 0; 
 				for (Element node : elements) {
 					try{
 						String URL = node.childNodes().get(2).childNodes().get(1).childNodes().get(1).attr("href");
 						String num = node.childNodes().get(2).childNodes().get(1).childNodes().get(1).childNodes()
 								.get(0).outerHtml();
 						if (StringUtil.isBlank(URL)) {
-						break;
+						continue;
 					}
+						i++;
 					urllist.append(num + "$" + URL);
 					urllist.append("#");
 					}catch(Exception e){
@@ -123,7 +125,7 @@ public class LetvDMCrawler extends BreadthCrawler {
 				}
 
 				String title = page.select(".textInfo>dt").text();
-				String director = "";
+				String director = ""; 
 				// infolist.get(5) 主演
 				// infolist.get(9) 地区
 				// infolist.get(11) 类型
@@ -141,20 +143,20 @@ public class LetvDMCrawler extends BreadthCrawler {
 				//v.setImg(img);
 				v.setHits(999);
 				v.setScore("9");
-				v.setArea("日本");
+				v.setArea("中国大陆".equals(page.select(".p3>a").get(0).text())?"内地":page.select(".p3>a").get(0).text());
 				v.setYear(page.select(".p4>a").text());
 				v.setActeres("");
 				v.setDirector(director);
 				// v.setScore(page.select(".num").get(0).childNode(0).outerHtml());
 				v.setDesc(page.select(".p7").toString());
-				v.setVclass(",172,");																	// s_url.length()
+				//v.setVclass(",172,");																	// s_url.length()
 																								// -
 																								// 1);
 				String imglide = page.select(".showPic>a>img").get(0).attr("src");
 				v.setImglide(imglide);
 				v.setImg(img);
 				v.setPlayer("letv");
-				v.setNeedpay("免会员直达");
+				v.setNeedpay("第"+i+"集");
 
 				//
 				// Elements typenode = page.select(".crumbs>a");
@@ -169,7 +171,7 @@ public class LetvDMCrawler extends BreadthCrawler {
 				 * urllist.toString(); s_url = s_url.substring(0, s_url.length()
 				 * - 1); v.setUrl(s_url); }
 				 */
-				dbutil.exesql(v.toString());
+				dbutil.exesql(v);
 				// createSQL(v);
 			} catch (Exception e) {
 				System.out.println("url："+page.getUrl()+"error");
@@ -179,11 +181,11 @@ public class LetvDMCrawler extends BreadthCrawler {
 	}
 
 	public static void main(String[] args) throws Exception {
-		int i = 1;
+		int i = 2;
 		while (i > 0) {
 			LetvDMCrawler crawler = new LetvDMCrawler("crawl", true, i);
 			crawler.setThreads(5);
-			crawler.setTopN(100);
+			crawler.setTopN(10);
 			// crawler.setResumable(true);
 			/* start crawl with depth of 4 */
 			crawler.start(4);

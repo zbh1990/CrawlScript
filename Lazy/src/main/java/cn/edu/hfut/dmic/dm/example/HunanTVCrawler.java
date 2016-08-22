@@ -150,7 +150,7 @@ public class HunanTVCrawler extends BreadthCrawler {
 			v.setDesc(page.select(".item.intro>span").outerHtml());
 			v.setHits(999);
 			try{
-			dbutil.exesql(v.toString());
+			dbutil.exesql(v);
 			}catch(Exception e){
 				e.printStackTrace();
 			}

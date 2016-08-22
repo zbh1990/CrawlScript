@@ -166,7 +166,7 @@ public class HunanTVSOAPCrawler extends BreadthCrawler {
 			// Elements typenode = page.select(".crumbs>a");
 			// String type
 			try {
-				dbutil.exesql(v.toString());
+				dbutil.exesql(v);
 				// createSQL(v);
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -179,7 +179,7 @@ public class HunanTVSOAPCrawler extends BreadthCrawler {
 		while (i > 0) {
 			HunanTVSOAPCrawler crawler = new HunanTVSOAPCrawler("crawl", true, i);
 			crawler.setThreads(5);
-			crawler.setTopN(100);
+			crawler.setTopN(10);
 			// crawler.setResumable(true);
 			/* start crawl with depth of 4 */
 			crawler.start(4);

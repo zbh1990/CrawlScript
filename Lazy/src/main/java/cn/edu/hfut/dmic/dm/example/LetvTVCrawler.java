@@ -149,7 +149,7 @@ public class LetvTVCrawler extends BreadthCrawler {
 				v.setPlayer("letv");
 				v.setNeedpay("第"+i+"集");
 
-				dbutil.exesql(v.toString());
+				dbutil.exesql(v);
 				// createSQL(v);
 			} catch (Exception e) {
 				System.out.println("url："+page.getUrl()+"error");

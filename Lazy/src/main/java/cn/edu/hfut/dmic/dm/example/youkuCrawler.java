@@ -136,7 +136,7 @@ public class youkuCrawler extends BreadthCrawler {
 					v.setUrl(s_url);
 				}
 
-				dbutil.exesql(v.toString());
+				dbutil.exesql(v);
 				// createSQL(v);
 			} catch (Exception e) {
 				e.printStackTrace();

@@ -153,7 +153,7 @@ public class LetvCrawler extends BreadthCrawler {
 				v.setImglide(imglide);
 				v.setPlayer("letv");
 				v.setUrl(s_url);
-				v.setNeedpay("免会员直达");
+				v.setNeedpay("");
 
 				//
 				// Elements typenode = page.select(".crumbs>a");
@@ -168,7 +168,7 @@ public class LetvCrawler extends BreadthCrawler {
 				 * urllist.toString(); s_url = s_url.substring(0, s_url.length()
 				 * - 1); v.setUrl(s_url); }
 				 */
-				dbutil.exesql(v.toString());
+				dbutil.exesql(v);
 				// createSQL(v);
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -177,7 +177,7 @@ public class LetvCrawler extends BreadthCrawler {
 	}
 
 	public static void main(String[] args) throws Exception {
-		int i = 5;
+		int i = 1;
 		while (i > 0) {
 			LetvCrawler crawler = new LetvCrawler("crawl", true, i);
 			crawler.setThreads(5);

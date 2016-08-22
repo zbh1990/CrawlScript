@@ -42,6 +42,7 @@ import cn.edu.hfut.dmic.webcollector.lazy.job.PPtvJob;
 import cn.edu.hfut.dmic.webcollector.lazy.job.QQtvJob;
 import cn.edu.hfut.dmic.webcollector.lazy.job.youKuJob;
 import cn.edu.hfut.dmic.webcollector.lazy.job.youKuShowJob;
+import cn.edu.hfut.dmic.webcollector.lazy.job.youkuDMJob;
 
 /**
  *
@@ -123,14 +124,14 @@ public class Main {
 		System.out.println(job.getKey() + " 已被安排执行于: " + sdf.format(ft) + "，并且以如下重复规则重复执行: " + trigger.getCronExpression());
 		
 		// PPtvJob 将每天1：50点执行一次
-		job = newJob(PPtvJob.class).withIdentity("PPtvJob", "group1").build();
+		job = newJob(youkuDMJob.class).withIdentity("youkuDMJob", "group1").build();
 		trigger = newTrigger().withIdentity("trigger10", "group1").withSchedule(cronSchedule("0 35 1,2,3,4,5,6,7,8,9,10,11,12,13,15,16,18,20,21,22,23 * * ?")).build();
 		ft = sched.scheduleJob(job, trigger);
 		System.out.println(job.getKey() + " 已被安排执行于: " + sdf.format(ft) + "，并且以如下重复规则重复执行: " + trigger.getCronExpression());
 
 
 		job = newJob(IQIYItvJob2.class).withIdentity("IQIYItvJob2", "group1").build();
-		trigger = newTrigger().withIdentity("trigger11", "group1").withSchedule(cronSchedule("0 40 1,2,3,4,5,6,7,8,9,10,11,12,13,15,16,18,20,21,22,23 * * ?")).build();
+		trigger = newTrigger().withIdentity("trigger11", "group1").withSchedule(cronSchedule("0 52 1,2,3,4,5,6,7,8,9,10,11,12,13,15,16,17,20,21,22,23 * * ?")).build();
 		ft = sched.scheduleJob(job, trigger);
 		System.out.println(job.getKey() + " 已被安排执行于: " + sdf.format(ft) + "，并且以如下重复规则重复执行: " + trigger.getCronExpression());
 		
@@ -144,4 +145,5 @@ public class Main {
 		// 开始执行，start()方法被调用后，计时器就开始工作，计时调度中允许放入N个Job
 		sched.start();
 	}
+	
 }

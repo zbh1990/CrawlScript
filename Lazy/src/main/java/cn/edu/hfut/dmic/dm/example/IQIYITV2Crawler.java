@@ -168,7 +168,7 @@ public class IQIYITV2Crawler extends BreadthCrawler {
 				s_url = s_url.substring(0, s_url.length() - 1);
 				v.setUrl(s_url);
 
-				dbutil.exesql(v.toString());
+				dbutil.exesql(v);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -180,19 +180,19 @@ public class IQIYITV2Crawler extends BreadthCrawler {
 		while (i > 0) {
 			IQIYITV2Crawler crawler = new IQIYITV2Crawler("crawl", true, i);
 			crawler.setThreads(5);
-			crawler.setTopN(10);
+			crawler.setTopN(100);
 			// crawler.setResumable(true);
 			/* start crawl with depth of 4 */
 			crawler.start(4);
 			i--;
 		}
 	}
-	public static void main2(String[] args) throws Exception {
+	public static void main(String[] args) throws Exception {
 		int i = 1;
 		while (i > 0) {
 			IQIYITV2Crawler crawler = new IQIYITV2Crawler("crawl", true, i);
 			crawler.setThreads(5);
-			crawler.setTopN(100);
+			crawler.setTopN(10);
 			// crawler.setResumable(true);
 			/* start crawl with depth of 4 */
 			crawler.start(4);

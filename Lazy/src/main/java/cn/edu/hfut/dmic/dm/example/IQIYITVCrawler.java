@@ -130,7 +130,7 @@ public class IQIYITVCrawler extends BreadthCrawler {
 				s_url = s_url.substring(0, s_url.length() - 1);
 				v.setUrl(s_url);
 
-				dbutil.exesql(v.toString());
+				dbutil.exesql(v);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
