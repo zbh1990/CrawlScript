@@ -150,7 +150,7 @@ public class IQIYITV2Crawler extends BreadthCrawler {
 				 //get.setHeader("Referer","http://easyplayer.site/?m=vod-detail-id-22033.html");
 				 CloseableHttpResponse response = httpclient.execute(get);
 				 String date = DateUtils.formatDate(new Date(),"yyyy-MM-dd");
-				 String path = "upload/vod/"+date+"/"+name;
+				 String path = "upload/vod/"+name;
 				FileUtils.writeFile(new File("/home/2kys/"+path), EntityUtils.toByteArray(response.getEntity()));
 				v.setImg(path);
 				StringBuffer urllist = new StringBuffer();

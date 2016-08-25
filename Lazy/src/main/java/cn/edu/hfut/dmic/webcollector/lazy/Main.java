@@ -38,8 +38,8 @@ import cn.edu.hfut.dmic.webcollector.lazy.job.IQIYItvJob2;
 import cn.edu.hfut.dmic.webcollector.lazy.job.LetvJob;
 import cn.edu.hfut.dmic.webcollector.lazy.job.LetvTvJob;
 import cn.edu.hfut.dmic.webcollector.lazy.job.LetvdmJob;
-import cn.edu.hfut.dmic.webcollector.lazy.job.PPtvJob;
 import cn.edu.hfut.dmic.webcollector.lazy.job.QQtvJob;
+import cn.edu.hfut.dmic.webcollector.lazy.job.sohuTVJob;
 import cn.edu.hfut.dmic.webcollector.lazy.job.youKuJob;
 import cn.edu.hfut.dmic.webcollector.lazy.job.youKuShowJob;
 import cn.edu.hfut.dmic.webcollector.lazy.job.youkuDMJob;
@@ -131,13 +131,19 @@ public class Main {
 
 
 		job = newJob(IQIYItvJob2.class).withIdentity("IQIYItvJob2", "group1").build();
-		trigger = newTrigger().withIdentity("trigger11", "group1").withSchedule(cronSchedule("0 52 1,2,3,4,5,6,7,8,9,10,11,12,13,15,16,17,20,21,22,23 * * ?")).build();
+		trigger = newTrigger().withIdentity("trigger11", "group1").withSchedule(cronSchedule("0 59 1,2,3,4,5,6,7,8,9,10,11,12,13,15,16,17,20,21,22,23 * * ?")).build();
 		ft = sched.scheduleJob(job, trigger);
 		System.out.println(job.getKey() + " 已被安排执行于: " + sdf.format(ft) + "，并且以如下重复规则重复执行: " + trigger.getCronExpression());
 		
 		
 		job = newJob(HanjutvJob.class).withIdentity("HanjutvJob", "group1").build();
-		trigger = newTrigger().withIdentity("trigger12", "group1").withSchedule(cronSchedule("0 42 1,2,3,4,5,6,7,8,9,10,11,12,13,14,16,18,20,21,22,23 * * ?")).build();
+		trigger = newTrigger().withIdentity("trigger12", "group1").withSchedule(cronSchedule("0 18 1,2,3,4,5,6,7,8,9,10,11,12,13,14,16,18,20,21,22,23 * * ?")).build();
+		ft = sched.scheduleJob(job, trigger);
+		System.out.println(job.getKey() + " 已被安排执行于: " + sdf.format(ft) + "，并且以如下重复规则重复执行: " + trigger.getCronExpression());
+		
+		
+		job = newJob(sohuTVJob.class).withIdentity("sohuTVJob", "group1").build();
+		trigger = newTrigger().withIdentity("trigger13", "group1").withSchedule(cronSchedule("0 48 1,2,3,4,5,6,7,8,9,10,11,12,13,14,16,18,20,21,22,23 * * ?")).build();
 		ft = sched.scheduleJob(job, trigger);
 		System.out.println(job.getKey() + " 已被安排执行于: " + sdf.format(ft) + "，并且以如下重复规则重复执行: " + trigger.getCronExpression());
 		

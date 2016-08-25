@@ -66,8 +66,10 @@ public class DBUtil {
 					d_playurl = result.getString("d_playurl");
 					d_playfrom = result.getString("d_playfrom");
 				}
+				if(v.getUrl().equals(d_playurl)){
+					return;
+				}
 				if (StringUtils.isNotBlank(d_playfrom) && d_playfrom.indexOf("$$$") > -1) {
-					System.out.println(d_playurl);
 					String[] d_playurls = d_playurl.split("\\$\\$\\$");
 					String[] d_playfroms = d_playfrom.split("\\$\\$\\$");
 					for (int i = 0; i < d_playfroms.length; i++) {

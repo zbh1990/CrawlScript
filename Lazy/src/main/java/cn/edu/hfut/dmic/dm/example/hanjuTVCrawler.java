@@ -114,7 +114,7 @@ public class hanjuTVCrawler extends BreadthCrawler {
 			
 		}
 
-		if (page.matchUrl("http://www.y3600.com/hanju/2016/.*html")) {
+		if (page.matchUrl("http://www.y3600.com/hanju/2016/835.html")) {
 			/* we use jsoup to parse page */
 			try {
 				Vodinfo v = infomap.get(page.getUrl());
@@ -123,7 +123,7 @@ public class hanjuTVCrawler extends BreadthCrawler {
 				}
 
 				/* extract title and content of news by css selector */
-				if(page.getHtml().indexOf("优土")<0){
+				if(page.getHtml().indexOf("ck_yk('")<0){
 					return;
 				}
 				String smalltype = "剧情";
@@ -138,12 +138,12 @@ public class hanjuTVCrawler extends BreadthCrawler {
 				 String url = v.getImg();
 				 String[] names  = url.split("/");
 				 String name = names[names.length-1];
-				 HttpGet get = new HttpGet(url);
+				// HttpGet get = new HttpGet(url);
 				 //get.setHeader("Referer","http://easyplayer.site/?m=vod-detail-id-22033.html");
-				 CloseableHttpResponse response = httpclient.execute(get);
+				// CloseableHttpResponse response = httpclient.execute(get);
 				 String path = "upload/vod/"+name;
-				FileUtils.writeFile(new File("/home/2kys/"+path), EntityUtils.toByteArray(response.getEntity()));
-				v.setImg(path);
+				//FileUtils.writeFile(new File("/home/2kys/"+path), EntityUtils.toByteArray(response.getEntity()));
+				//v.setImg(path);
 				v.setPlayer("youkuyun");
 				v.setHits(9999);
 				//v.setNeedpay("爱奇艺vip");
@@ -152,12 +152,25 @@ public class hanjuTVCrawler extends BreadthCrawler {
 				//
 				// Elements typenode = page.select(".crumbs>a");
 				// String type
-				Elements nodes = page.select(".sort>ul").get(0).children();
+				System.out.println(page.getHtml());
+				Elements pnodes= page.select(".sort>ul");
+						Elements nodes=new Elements();
+				if(page.select(".sort>ul")==null||page.select(".sort>ul").size()==0||nodes.text().indexOf("ck_yk('")<0){
+					Elements temp=page.select("#playlist>div>ul>li>a");
+					for(Element node :	temp){
+						if(node.toString().indexOf("ck_yk('")>-1){
+							nodes.add(node);
+						}
+					}
+				}else{
+					nodes= pnodes.get(0).children();
+				}
+				 
 				int currentindex = 0;
 				StringBuffer urllist = new StringBuffer();
 				for (int i=0;i<nodes.size();i++) {
 					Element node = nodes.get(i);
-					String URL = StringUtils.substringBetween(node.toString(), "ck_yk('", "')");
+					String URL = StringUtils.substringBetween(node.toString(), "ck_yk('", "==")+"==";
 					String num =node.text();
 					if (StringUtil.isBlank(URL)) {
 						break;
@@ -189,10 +202,10 @@ public class hanjuTVCrawler extends BreadthCrawler {
 		}
 	}
 	public static void main(String[] args) throws Exception {
-		int i = 1;
+		int i = 2;
 		while (i > 0) {
 			hanjuTVCrawler crawler = new hanjuTVCrawler("crawl", true, i);
-			crawler.setThreads(5);
+			crawler.setThreads(50);
 			crawler.setTopN(100);
 			// crawler.setResumable(true);
 			/* start crawl with depth of 4 */
