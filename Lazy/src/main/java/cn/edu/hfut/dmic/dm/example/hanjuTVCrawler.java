@@ -68,12 +68,12 @@ public class hanjuTVCrawler extends BreadthCrawler {
 	 *            if autoParse is true,BreadthCrawler will auto extract links
 	 *            which match regex rules from pag
 	 */
-	public hanjuTVCrawler(String crawlPath, boolean autoParse, int id) {
+	public hanjuTVCrawler(String crawlPath, boolean autoParse, int id,String year) {
 		super(crawlPath, autoParse);
 		/* start page */
-		String url = "http://www.y3600.com/hanju/2016/index.html";
+		String url = "http://www.y3600.com/hanju/"+year+"/index.html";
 		if(id>1){
-			url = "http://www.y3600.com/hanju/2016/index_"+id+".html";
+			url = "http://www.y3600.com/hanju/"+year+"/index_"+id+".html";
 		}
 		this.addSeed(url);// 电视剧
 
@@ -179,7 +179,17 @@ public class hanjuTVCrawler extends BreadthCrawler {
 	public static void execute(int pagesize) throws Exception {
 		int i = pagesize;
 		while (i > 0) {
-			hanjuTVCrawler crawler = new hanjuTVCrawler("crawl", true, i);
+			hanjuTVCrawler crawler = new hanjuTVCrawler("crawl", true, i,"2016");
+			crawler.setThreads(5);
+			crawler.setTopN(10);
+			// crawler.setResumable(true);
+			/* start crawl with depth of 4 */
+			crawler.start(4);
+			i--;
+		}
+		 i = pagesize;
+		while (i > 0) {
+			hanjuTVCrawler crawler = new hanjuTVCrawler("crawl", true, i,"2015");
 			crawler.setThreads(5);
 			crawler.setTopN(10);
 			// crawler.setResumable(true);
@@ -191,7 +201,7 @@ public class hanjuTVCrawler extends BreadthCrawler {
 	public static void main(String[] args) throws Exception {
 		int i = 1;
 		while (i > 0) {
-			hanjuTVCrawler crawler = new hanjuTVCrawler("crawl", true, i);
+			hanjuTVCrawler crawler = new hanjuTVCrawler("crawl", true, i,"2016");
 			crawler.setThreads(5);
 			crawler.setTopN(100);
 			// crawler.setResumable(true);

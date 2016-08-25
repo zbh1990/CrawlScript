@@ -90,7 +90,6 @@ public class DBUtil {
 					v.setPlayer(newplayer);
 				}
 				if (StringUtils.isNotBlank(d_playfrom) && d_playfrom.indexOf("$$$") < 0&&!d_playfrom.equals(v.getPlayer())) {
-					System.out.println(d_playurl);
 					String newplayer = "";
 					String newurl = "";
 					newplayer = d_playfrom + "$$$" + v.getPlayer();

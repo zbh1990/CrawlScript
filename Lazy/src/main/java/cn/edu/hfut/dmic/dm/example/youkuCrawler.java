@@ -60,8 +60,8 @@ public class youkuCrawler extends BreadthCrawler {
 	public youkuCrawler(String crawlPath, boolean autoParse, int id) {
 		super(crawlPath, autoParse);
 		/* start page */
-		//
-		this.addSeed("http://list.youku.com/category/show/c_97_a_大陆_s_1_d_1_p_" + id + ".html");// 电视剧
+		            //http://list.youku.com/category/show/c_97_s_1_d_1_p_
+		this.addSeed("http://list.youku.com/category/show/c_97_s_1_d_1_p_" + id + ".html");// 电视剧
 		// this.addSeed("http://list.youku.com/category/show/c_100_s_1_d_1_p_"+id+".html")
 
 		/* fetch url like http://news.hfut.edu.cn/show-xxxxxxhtml */
