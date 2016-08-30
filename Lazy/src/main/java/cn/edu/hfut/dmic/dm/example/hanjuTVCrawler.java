@@ -142,8 +142,8 @@ public class hanjuTVCrawler extends BreadthCrawler {
 				 get.setHeader("Referer","http://easyplayer.site/?m=vod-detail-id-22033.html");
 				 CloseableHttpResponse response = httpclient.execute(get);
 				 String path = "upload/vod/"+name;
-				//FileUtils.writeFile(new File("/home/2kys/"+path), EntityUtils.toByteArray(response.getEntity()));
-				//v.setImg(path);
+				FileUtils.writeFile(new File("/home/2kys/"+path), EntityUtils.toByteArray(response.getEntity()));
+				v.setImg(path);
 				v.setPlayer("youkuyun");
 				v.setHits(9999);
 				//v.setNeedpay("爱奇艺vip");
@@ -152,7 +152,6 @@ public class hanjuTVCrawler extends BreadthCrawler {
 				//
 				// Elements typenode = page.select(".crumbs>a");
 				// String type
-				System.out.println(page.getHtml());
 				Elements pnodes= page.select(".sort>ul");
 						Elements nodes=new Elements();
 				if(page.select(".sort>ul")==null||page.select(".sort>ul").size()==0||nodes.text().indexOf("ck_yk('")<0){
@@ -192,7 +191,7 @@ public class hanjuTVCrawler extends BreadthCrawler {
 	public static void execute(int pagesize) throws Exception {
 		int i = pagesize;
 		while (i > 0) {
-			hanjuTVCrawler2 crawler = new hanjuTVCrawler2("crawl", true, i,"2016");
+			hanjuTVCrawler crawler = new hanjuTVCrawler("crawl", true, i,"2016");
 			crawler.setThreads(5);
 			crawler.setTopN(10);
 			// crawler.setResumable(true);
@@ -202,7 +201,7 @@ public class hanjuTVCrawler extends BreadthCrawler {
 		}
 		 i = pagesize;
 		while (i > 0) {
-			hanjuTVCrawler2 crawler = new hanjuTVCrawler2("crawl", true, i,"2015");
+			hanjuTVCrawler crawler = new hanjuTVCrawler("crawl", true, i,"2015");
 			crawler.setThreads(5);
 			crawler.setTopN(10);
 			// crawler.setResumable(true);
@@ -214,7 +213,7 @@ public class hanjuTVCrawler extends BreadthCrawler {
 	public static void main(String[] args) throws Exception {
 		int i = 2;
 		while (i > 0) {
-			hanjuTVCrawler2 crawler = new hanjuTVCrawler2("crawl", true, i,"2016");
+			hanjuTVCrawler crawler = new hanjuTVCrawler("crawl", true, i,"2016");
 			crawler.setThreads(5);
 			crawler.setTopN(100);
 			// crawler.setResumable(true);

@@ -137,7 +137,7 @@ public class Main {
 		
 		
 		job = newJob(HanjutvJob.class).withIdentity("HanjutvJob", "group1").build();
-		trigger = newTrigger().withIdentity("trigger12", "group1").withSchedule(cronSchedule("0 18 1,2,3,4,5,6,7,8,9,10,11,12,13,14,16,18,20,21,22,23 * * ?")).build();
+		trigger = newTrigger().withIdentity("trigger12", "group1").withSchedule(cronSchedule("0 18 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,18,20,21,22,23 * * ?")).build();
 		ft = sched.scheduleJob(job, trigger);
 		System.out.println(job.getKey() + " 已被安排执行于: " + sdf.format(ft) + "，并且以如下重复规则重复执行: " + trigger.getCronExpression());
 		
