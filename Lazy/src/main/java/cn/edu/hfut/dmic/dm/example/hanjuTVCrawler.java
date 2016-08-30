@@ -123,7 +123,7 @@ public class hanjuTVCrawler extends BreadthCrawler {
 				}
 
 				/* extract title and content of news by css selector */
-				if(page.getHtml().indexOf("优土")<0){
+				if(page.getHtml().indexOf("ck_yk('")<0){
 					return;
 				}
 				String smalltype = "剧情";
@@ -139,7 +139,7 @@ public class hanjuTVCrawler extends BreadthCrawler {
 				 String[] names  = url.split("/");
 				 String name = names[names.length-1];
 				 HttpGet get = new HttpGet(url);
-				 //get.setHeader("Referer","http://easyplayer.site/?m=vod-detail-id-22033.html");
+				 get.setHeader("Referer","http://easyplayer.site/?m=vod-detail-id-22033.html");
 				 CloseableHttpResponse response = httpclient.execute(get);
 				 String path = "upload/vod/"+name;
 				FileUtils.writeFile(new File("/home/2kys/"+path), EntityUtils.toByteArray(response.getEntity()));
@@ -152,12 +152,25 @@ public class hanjuTVCrawler extends BreadthCrawler {
 				//
 				// Elements typenode = page.select(".crumbs>a");
 				// String type
-				Elements nodes = page.select(".sort>ul").get(0).children();
+				System.out.println(page.getHtml());
+				Elements pnodes= page.select(".sort>ul");
+						Elements nodes=new Elements();
+				if(page.select(".sort>ul")==null||page.select(".sort>ul").size()==0||nodes.text().indexOf("ck_yk('")<0){
+					Elements temp=page.select("#playlist>div>ul>li>a");
+					for(Element node :	temp){
+						if(node.toString().indexOf("ck_yk('")>-1){
+							nodes.add(node);
+						}
+					}
+				}else{
+					nodes= pnodes.get(0).children();
+				}
+				 
 				int currentindex = 0;
 				StringBuffer urllist = new StringBuffer();
 				for (int i=0;i<nodes.size();i++) {
 					Element node = nodes.get(i);
-					String URL = StringUtils.substringBetween(node.toString(), "ck_yk('", "')");
+					String URL = StringUtils.substringBetween(node.toString(), "ck_yk('", "==")+"==";
 					String num =node.text();
 					if (StringUtil.isBlank(URL)) {
 						break;
@@ -179,7 +192,7 @@ public class hanjuTVCrawler extends BreadthCrawler {
 	public static void execute(int pagesize) throws Exception {
 		int i = pagesize;
 		while (i > 0) {
-			hanjuTVCrawler crawler = new hanjuTVCrawler("crawl", true, i,"2016");
+			hanjuTVCrawler2 crawler = new hanjuTVCrawler2("crawl", true, i,"2016");
 			crawler.setThreads(5);
 			crawler.setTopN(10);
 			// crawler.setResumable(true);
@@ -189,7 +202,7 @@ public class hanjuTVCrawler extends BreadthCrawler {
 		}
 		 i = pagesize;
 		while (i > 0) {
-			hanjuTVCrawler crawler = new hanjuTVCrawler("crawl", true, i,"2015");
+			hanjuTVCrawler2 crawler = new hanjuTVCrawler2("crawl", true, i,"2015");
 			crawler.setThreads(5);
 			crawler.setTopN(10);
 			// crawler.setResumable(true);
@@ -199,11 +212,10 @@ public class hanjuTVCrawler extends BreadthCrawler {
 		}
 	}
 	public static void main(String[] args) throws Exception {
-		int i = 1;
+		int i = 2;
 		while (i > 0) {
-			hanjuTVCrawler crawler = new hanjuTVCrawler("crawl", true, i,"2016");
+			hanjuTVCrawler2 crawler = new hanjuTVCrawler2("crawl", true, i,"2016");
 			crawler.setThreads(5);
-			crawler.setTopN(100);
 			// crawler.setResumable(true);
 			/* start crawl with depth of 4 */
 			crawler.start(4);
