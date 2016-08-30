@@ -82,7 +82,7 @@ public class hanjuTVCrawler extends BreadthCrawler {
 		/* fetch url like http://news.hfut.edu.cn/show-xxxxxxhtml */
 		// http://www.hunantv.com/v/3/150215/f/1503499.html
 		// http://www.hunantv.com/v/3/102123/f/1503553.html
-		this.addRegex(".*/hanju/2016/.*html");
+		this.addRegex(".*/hanju/"+year+"/.*html");
 		/* do not fetch jpg|png|gif */
 		// this.addRegex("-.*\\.(jpg|png|gif).*");
 		/* do not fetch url contains # */
@@ -91,7 +91,7 @@ public class hanjuTVCrawler extends BreadthCrawler {
 
 	@Override
 	public void visit(Page page, CrawlDatums next) {
-		if(page.matchUrl("http://www.y3600.com/hanju/2016/index.*")){
+		if(page.matchUrl("http://www.y3600.com/hanju/2016/index.*")||page.matchUrl("http://www.y3600.com/hanju/2015/index.*")){
 			Elements elements = page.select(".m-ddone.w1230").get(0).children();
 			for (Element node : elements) {
 				try{
@@ -114,7 +114,7 @@ public class hanjuTVCrawler extends BreadthCrawler {
 			
 		}
 
-		if (page.matchUrl("http://www.y3600.com/hanju/2016/835.html")) {
+		if (page.matchUrl("http://www.y3600.com/hanju/2016/.*.html")||page.matchUrl("http://www.y3600.com/hanju/2015/.*.html")) {
 			/* we use jsoup to parse page */
 			try {
 				Vodinfo v = infomap.get(page.getUrl());
@@ -139,11 +139,10 @@ public class hanjuTVCrawler extends BreadthCrawler {
 				 String[] names  = url.split("/");
 				 String name = names[names.length-1];
 				 HttpGet get = new HttpGet(url);
-				 get.setHeader("Referer","http://easyplayer.site/?m=vod-detail-id-22033.html");
 				 CloseableHttpResponse response = httpclient.execute(get);
 				 String path = "upload/vod/"+name;
-				//FileUtils.writeFile(new File("/home/2kys/"+path), EntityUtils.toByteArray(response.getEntity()));
-				//v.setImg(path);
+				FileUtils.writeFile(new File("/home/2kys/"+path), EntityUtils.toByteArray(response.getEntity()));
+				v.setImg(path);
 				v.setPlayer("youkuyun");
 				v.setHits(9999);
 				//v.setNeedpay("爱奇艺vip");
@@ -152,7 +151,6 @@ public class hanjuTVCrawler extends BreadthCrawler {
 				//
 				// Elements typenode = page.select(".crumbs>a");
 				// String type
-				System.out.println(page.getHtml());
 				Elements pnodes= page.select(".sort>ul");
 						Elements nodes=new Elements();
 				if(page.select(".sort>ul")==null||page.select(".sort>ul").size()==0||nodes.text().indexOf("ck_yk('")<0){
@@ -192,7 +190,7 @@ public class hanjuTVCrawler extends BreadthCrawler {
 	public static void execute(int pagesize) throws Exception {
 		int i = pagesize;
 		while (i > 0) {
-			hanjuTVCrawler2 crawler = new hanjuTVCrawler2("crawl", true, i,"2016");
+			hanjuTVCrawler crawler = new hanjuTVCrawler("crawl", true, i,"2016");
 			crawler.setThreads(5);
 			crawler.setTopN(10);
 			// crawler.setResumable(true);
@@ -202,7 +200,7 @@ public class hanjuTVCrawler extends BreadthCrawler {
 		}
 		 i = pagesize;
 		while (i > 0) {
-			hanjuTVCrawler2 crawler = new hanjuTVCrawler2("crawl", true, i,"2015");
+			hanjuTVCrawler crawler = new hanjuTVCrawler("crawl", true, i,"2015");
 			crawler.setThreads(5);
 			crawler.setTopN(10);
 			// crawler.setResumable(true);
@@ -214,7 +212,7 @@ public class hanjuTVCrawler extends BreadthCrawler {
 	public static void main(String[] args) throws Exception {
 		int i = 2;
 		while (i > 0) {
-			hanjuTVCrawler2 crawler = new hanjuTVCrawler2("crawl", true, i,"2016");
+			hanjuTVCrawler crawler = new hanjuTVCrawler("crawl", true, i,"2016");
 			crawler.setThreads(5);
 			crawler.setTopN(100);
 			// crawler.setResumable(true);

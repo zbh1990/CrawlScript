@@ -119,6 +119,7 @@ public class youkuCrawler extends BreadthCrawler {
 				//
 				// Elements typenode = page.select(".crumbs>a");
 				// String type
+				int i = 0;
 				if (page.select(".item").size() > 3) {
 					Elements nodes = page.select(".coll_10>ul>li>a");
 					StringBuffer urllist = new StringBuffer();
@@ -126,14 +127,16 @@ public class youkuCrawler extends BreadthCrawler {
 						String URL = node.attr("href");
 						String num = node.attr("title");
 						if (StringUtil.isBlank(URL)) {
-							break;
+							continue;
 						}
 						urllist.append(num + "$" + URL);
 						urllist.append("#");
+						i++;
 					}
 					String s_url = urllist.toString();
 					s_url = s_url.substring(0, s_url.length() - 1);
 					v.setUrl(s_url);
+					v.setNeedpay("第"+i+"集");
 				}
 
 				dbutil.exesql(v);
