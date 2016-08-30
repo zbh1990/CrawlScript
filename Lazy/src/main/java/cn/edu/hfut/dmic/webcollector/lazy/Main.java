@@ -144,8 +144,6 @@ public class Main {
 		
 		job = newJob(sohuTVJob.class).withIdentity("sohuTVJob", "group1").build();
 		trigger = newTrigger().withIdentity("trigger13", "group1").withSchedule(cronSchedule("0 48 1,2,3,4,5,6,7,8,9,10,11,12,13,14,16,18,20,21,22,23 * * ?")).build();
-		ft = sched.scheduleJob(job, trigger);
-		System.out.println(job.getKey() + " 已被安排执行于: " + sdf.format(ft) + "，并且以如下重复规则重复执行: " + trigger.getCronExpression());
 		
 		// 开始执行，start()方法被调用后，计时器就开始工作，计时调度中允许放入N个Job
 		sched.start();

@@ -114,7 +114,7 @@ public class hanjuTVCrawler extends BreadthCrawler {
 			
 		}
 
-		if (page.matchUrl("http://www.y3600.com/hanju/2016/.*html")) {
+		if (page.matchUrl("http://www.y3600.com/hanju/2016/835.html")) {
 			/* we use jsoup to parse page */
 			try {
 				Vodinfo v = infomap.get(page.getUrl());
@@ -142,8 +142,8 @@ public class hanjuTVCrawler extends BreadthCrawler {
 				 get.setHeader("Referer","http://easyplayer.site/?m=vod-detail-id-22033.html");
 				 CloseableHttpResponse response = httpclient.execute(get);
 				 String path = "upload/vod/"+name;
-				FileUtils.writeFile(new File("/home/2kys/"+path), EntityUtils.toByteArray(response.getEntity()));
-				v.setImg(path);
+				//FileUtils.writeFile(new File("/home/2kys/"+path), EntityUtils.toByteArray(response.getEntity()));
+				//v.setImg(path);
 				v.setPlayer("youkuyun");
 				v.setHits(9999);
 				//v.setNeedpay("爱奇艺vip");
@@ -216,6 +216,7 @@ public class hanjuTVCrawler extends BreadthCrawler {
 		while (i > 0) {
 			hanjuTVCrawler2 crawler = new hanjuTVCrawler2("crawl", true, i,"2016");
 			crawler.setThreads(5);
+			crawler.setTopN(100);
 			// crawler.setResumable(true);
 			/* start crawl with depth of 4 */
 			crawler.start(4);
