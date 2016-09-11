@@ -71,7 +71,7 @@ public class IQIYITVMovieCrawler extends BreadthCrawler {
 	public IQIYITVMovieCrawler(String crawlPath, boolean autoParse, int id) {
 		super(crawlPath, autoParse);
 		/* start page */
-		this.addSeed("http://list.iqiyi.com/www/1/-------------4-"+id+"-1-iqiyi--.html");// 电视剧
+		this.addSeed("http://list.iqiyi.com/www/1/2-----------1980_1989--8-"+id+"-1-iqiyi--.html");// 电视剧
 
 		// this.addSeed("http://list.youku.com/category/show/c_100_s_1_d_1_p_"+id+".html")
 
@@ -129,6 +129,12 @@ public class IQIYITVMovieCrawler extends BreadthCrawler {
 				t.put("剧情", "10");
 				t.put("战争", "11");*/
 				
+				String bigtype =page.select("#data-vpointlist>a").text();
+				System.out.println(page.getHtml());
+				System.out.println(bigtype);
+				if(StringUtils.isBlank(bigtype)){
+					return ;
+				}
 				v.setBigtype("10");
 				v.setSmalltype(page.select("#datainfo-director-list").text());
 				v.setArea(page.select("#thirdPartyTagList").text());
@@ -177,8 +183,8 @@ public class IQIYITVMovieCrawler extends BreadthCrawler {
 		}
 	}
 	public static void main(String[] args) throws Exception {
-		int i = 18;
-		while (i > 17) {
+		int i = 10;
+		while (i > 0) {
 			IQIYITVMovieCrawler crawler = new IQIYITVMovieCrawler("crawl", true, i);
 			crawler.setThreads(5);
 			crawler.setTopN(10);

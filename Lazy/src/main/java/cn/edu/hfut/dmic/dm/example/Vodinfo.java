@@ -33,7 +33,8 @@ public class Vodinfo {
 				+ System.currentTimeMillis() / 1000 + ", " + System.currentTimeMillis() / 1000 + ", "
 				+ System.currentTimeMillis() / 1000 + ", 0, '" + desc + "', '" + player + "', '0', '', '" + url
 				+ "', '', '', '', '')ON DUPLICATE KEY UPDATE   d_playfrom='" + player + "',  d_time="
-				+ System.currentTimeMillis() / 1000 + ", d_pic='"+img+"', d_playurl='"+url+"', d_remarks='"+needpay+"';";
+						+ System.currentTimeMillis() / 1000 + ",  d_type='"
+								+ bigtype + "', d_pic='"+img+"', d_playurl='"+url+"', d_remarks='"+needpay+"';";
 	}
 
 	
