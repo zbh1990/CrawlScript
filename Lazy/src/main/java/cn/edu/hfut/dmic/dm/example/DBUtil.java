@@ -88,8 +88,8 @@ public class DBUtil {
 						newplayer = newplayer + d_playfroms[i] + "$$$";
 						newurl = newurl + d_playurls[i] + "$$$";
 					}
-					v.setUrl(newurl);
-					v.setPlayer(newplayer);
+					v.setUrl(newurl+v.getUrl());
+					v.setPlayer(newplayer+v.getPlayer());
 				}
 				if (StringUtils.isNotBlank(d_playfrom) && d_playfrom.indexOf("$$$") < 0&&!d_playfrom.equals(v.getPlayer())) {
 					String newplayer = "";

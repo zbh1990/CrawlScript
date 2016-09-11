@@ -117,7 +117,7 @@ public class HunanTVSOAPCrawler extends BreadthCrawler {
 			String id = s.substring(s.lastIndexOf("/") + 1, s.lastIndexOf(".html"));
 			v.setPlayer("hunantv");
 
-			String playinfourl = "http://v.api.mgtv.com/list/tvlist?video_id=" + id;
+			String playinfourl = "http://v.api.mgtv.com/list/tvlist?video_id=" + id+"&page=1&size=250";
 			try {
 				String playinfo = GetIpAddress.getInfo(playinfourl, 5000);
 				JSONObject j = new JSONObject(playinfo);

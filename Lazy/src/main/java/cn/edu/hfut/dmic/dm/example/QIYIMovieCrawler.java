@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -24,6 +25,7 @@ import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
 import org.jsoup.helper.StringUtil;
 import org.jsoup.nodes.Element;
+import org.jsoup.nodes.Node;
 import org.jsoup.select.Elements;
 
 import cn.edu.hfut.dmic.webcollector.model.CrawlDatums;
@@ -36,12 +38,10 @@ import cn.edu.hfut.dmic.webcollector.util.FileUtils;
  *
  * @author hu
  */
-public class IQIYITVMovieCrawler extends BreadthCrawler {
+public class QIYIMovieCrawler extends BreadthCrawler {
 
 	public static Map<String, String> t = new HashMap<String, String>();
-	public List<Vodinfo> result = new ArrayList<Vodinfo>();
 	public static DBUtil dbutil =DBUtil.getInstance();
-	public Map<String,Vodinfo> infomap=new HashMap<String,Vodinfo>();
 	static {
 		t.put("电影", "1");
 		t.put("电视剧", "2");
@@ -68,100 +68,79 @@ public class IQIYITVMovieCrawler extends BreadthCrawler {
 	 *            if autoParse is true,BreadthCrawler will auto extract links
 	 *            which match regex rules from pag
 	 */
-	public IQIYITVMovieCrawler(String crawlPath, boolean autoParse, int id) {
+	public QIYIMovieCrawler(String crawlPath, boolean autoParse, int id) {
 		super(crawlPath, autoParse);
 		/* start page */
-		this.addSeed("http://list.iqiyi.com/www/1/2-----------1980_1989--8-"+id+"-1-iqiyi--.html");// 电视剧
+		this.addSeed("http://www.iqiyi.com/lib/dianying/%2C%2C_4_"+id+".html");// 电影
 
-		// this.addSeed("http://list.youku.com/category/show/c_100_s_1_d_1_p_"+id+".html")
-
-		/* fetch url like http://news.hfut.edu.cn/show-xxxxxxhtml */
-		// http://www.hunantv.com/v/3/150215/f/1503499.html
-		// http://www.hunantv.com/v/3/102123/f/1503553.html
-		this.addRegex("http://www.iqiyi.com/v_.*html.*");
-		/* do not fetch jpg|png|gif */
-		// this.addRegex("-.*\\.(jpg|png|gif).*");
-		/* do not fetch url contains # */
-		// this.addRegex("-.*#.*");
+		this.addRegex("http://www.iqiyi.com/lib/m_.*html.*");
 	}
 
 	@Override
 	public void visit(Page page, CrawlDatums next) {
-		if(page.matchUrl("http://list.iqiyi.com/www/1/.*")){
-			Elements elements = page.select(".site-piclist.site-piclist-180236.site-piclist-auto").get(0).children();
-			for (Element node : elements) {
-				try{
-					String key = node.select(".site-piclist_pic_link").attr("href");
-					String img = StringUtils.substringBetween( node.select(".site-piclist_pic_link").toString(), "src=\"", "\"");
-					if(StringUtils.isBlank(img)){
-						continue;
-					}
-					Vodinfo v = new Vodinfo();
-					v.setImg(img);
-					v.setActeres( node.select(".role_info").text());
-					v.setTitle( StringUtils.substringBetween( node.select(".site-piclist_pic_link").toString(), "title=\"", "\""));
-					v.setNeedpay(node.select(".site-piclist_pic_link").text());
-					infomap.put(key, v);
-				}catch(Exception e){
-					e.printStackTrace();
-					break;
-				}
-			}
-			
-		}
 
-		if (page.matchUrl("http://www.iqiyi.com/.*html.*")) {
+		if (page.matchUrl("http://www.iqiyi.com/lib/m_.*html.*")) {
 			/* we use jsoup to parse page */
 			try {
-				Vodinfo v = infomap.get(page.getUrl());
-				if(v==null){
-					return;
-				}
+				Vodinfo v = new Vodinfo();
+				String img = StringUtils.substringBetween( page.select(".result_pic>a>img").toString(), "src=\"", "\"");
+				v.setImg(img);
+				v.setTitle( page.select(".main_title>a").text());
 
-				/* extract title and content of news by css selector */
-
-			/*	t.put("动漫", "4");
-				t.put("动作", "5");
-				t.put("喜剧", "6");
-				t.put("爱情", "7");
-				t.put("科幻", "8");
-				t.put("恐怖", "9");
-				t.put("剧情", "10");
-				t.put("战争", "11");*/
 				
-				String bigtype =page.select("#data-vpointlist>a").text();
-				System.out.println(page.getHtml());
-				System.out.println(bigtype);
-				if(StringUtils.isBlank(bigtype)){
-					return ;
+				
+				Elements elements = page.select(".topic_item.clearfix");
+				String bigtype = "10";
+				v.setYear("90");
+				for (Element element : elements) {
+					if (element.html().indexOf("上映时间") > 0) {
+						String year = StringUtils.substringBetween( element.toString(), "上映时间：", "-");
+						if(StringUtils.isNotBlank(year))
+						v.setYear( StringUtils.substringBetween( element.toString(), "上映时间：", "-"));
+					}
+					if (element.html().indexOf("导演") > 0) {
+						v.setDirector(element.childNodes().get(1).childNodes().get(1).attr("title"));
+					}
+					if (element.html().indexOf("主演") > 0) {
+						String acteres=element.text();
+						v.setActeres(acteres);
+					}
+					if (element.html().indexOf("地区") > 0) {
+						String area = element.childNodes().get(1).childNodes().get(1).childNodes().get(1).attr("title");
+						v.setArea(area);
+					
+
+					}
+					if (element.html().indexOf("看点") > 0) {
+						Elements temp = element.select(".look_point");
+						List<Node> node = temp.get(0).childNodes();
+						String smalltype="";
+						for(int i=1;i<node.size();i++){
+							String t_smalltypes = node.get(i).attr("title");
+							if(StringUtils.isNotBlank(t.get(t_smalltypes)))
+							bigtype = t.get(t_smalltypes);
+							smalltype+=t_smalltypes;
+						}
+						v.setBigtype(bigtype);
+						v.setSmalltype(smalltype);
+					}
 				}
-				v.setBigtype("10");
-				v.setSmalltype(page.select("#datainfo-director-list").text());
-				v.setArea(page.select("#thirdPartyTagList").text());
-				v.setYear("2016");
-				//System.out.println(page.select("#datainfo-director-list").text());
-				v.setDirector(page.select("#datainfo-director-list").text());
-				v.setScore("10");
-				//v.setImglide("http://pic1.qiyipic.com/common/lego/20160705/9184be135ca144a0999a55ac26392e8c.jpg");
+				
 				v.setPlayer("qiyi");
 				v.setHits(9999);
-				//v.setNeedpay("爱奇艺vip");
-				v.setDesc(page.select("#datainfo-desc-text").toString());
-				//
-				// Elements typenode = page.select(".crumbs>a");
-				// String type
+				v.setDesc(page.select(".mod-body.introduce-info>p").toString());
+				
 				 CloseableHttpClient httpclient = HttpClients.createDefault(); 
 				 String url = v.getImg();
 				 String[] names  = url.split("/");
 				 String name = names[names.length-1];
 				 HttpGet get = new HttpGet(url);
-				 //get.setHeader("Referer","http://easyplayer.site/?m=vod-detail-id-22033.html");
 				 CloseableHttpResponse response = httpclient.execute(get);
-				 String date = DateUtils.formatDate(new Date(),"yyyy-MM-dd");
 				 String path = "upload/vod/"+name;
 				FileUtils.writeFile(new File("/home/2kys/"+path), EntityUtils.toByteArray(response.getEntity()));
 				v.setImg(path);
-				v.setUrl(page.getUrl().split("#")[0]);
+				String playurl = page.select(".search-btn-large.search-btn-green").attr("href");
+				v.setUrl(playurl.split("#")[0]);
 
 				dbutil.exesql(v);
 			} catch (Exception e) {
@@ -173,7 +152,7 @@ public class IQIYITVMovieCrawler extends BreadthCrawler {
 	public static void execute(int pagesize) throws Exception {
 		int i = pagesize;
 		while (i > 0) {
-			IQIYITVMovieCrawler crawler = new IQIYITVMovieCrawler("crawl", true, i);
+			QIYIMovieCrawler crawler = new QIYIMovieCrawler("crawl", true, i);
 			crawler.setThreads(50);
 			crawler.setTopN(100);
 			// crawler.setResumable(true);
@@ -183,9 +162,9 @@ public class IQIYITVMovieCrawler extends BreadthCrawler {
 		}
 	}
 	public static void main(String[] args) throws Exception {
-		int i = 10;
+		int i = 1;
 		while (i > 0) {
-			IQIYITVMovieCrawler crawler = new IQIYITVMovieCrawler("crawl", true, i);
+			QIYIMovieCrawler crawler = new QIYIMovieCrawler("crawl", true, i);
 			crawler.setThreads(5);
 			crawler.setTopN(10);
 			// crawler.setResumable(true);
