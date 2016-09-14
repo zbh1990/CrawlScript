@@ -89,6 +89,25 @@ public class pptvcartoonCrawler extends BreadthCrawler {
 				// 播放列表地址
 				String playinfourl = "http://apis.web.pptv.com/show/videoList?pid=" + param.get("pid");
 				String playinfo = GetIpAddress.getInfo(playinfourl, 5000);
+				System.out.println("playinfourl:" + playinfourl);
+				System.out.println("playinfo:" + playinfo);
+				String date = new JSONObject(playinfo).get("data")+"";
+				int j=3;
+				if (StringUtils.isBlank(date)) {
+					while (j > 0) {
+						playinfo = GetIpAddress.getInfo(playinfourl, 5000);
+						System.out.println("playinfourl:" + playinfourl);
+						System.out.println("playinfo:" + playinfo);
+						date = new JSONObject(playinfo).get("data")+"";
+						if (StringUtils.isNotBlank(date)) {
+							break;
+						}
+						j--;
+						Thread.sleep(1000);
+					}
+				}
+				System.out.println("playinfourl:" + playinfourl);
+				System.out.println("playinfo:" + playinfo);
 				JSONArray playinfoList = new JSONObject(playinfo).getJSONObject("data").getJSONArray("list");
 				StringBuffer urllist = new StringBuffer();
 				String needpay = "";
@@ -174,8 +193,8 @@ public class pptvcartoonCrawler extends BreadthCrawler {
 		int i = pagesize;
 		while (i > 0) {
 			pptvcartoonCrawler crawler = new pptvcartoonCrawler("crawl", true, i);
-			crawler.setThreads(50);
-			crawler.setTopN(100);
+			crawler.setThreads(5);
+			crawler.setTopN(10);
 			// crawler.setResumable(true);
 			/* start crawl with depth of 4 */
 			crawler.start(4);
@@ -185,11 +204,11 @@ public class pptvcartoonCrawler extends BreadthCrawler {
 	}
 	
 	public static void main(String[] args) throws Exception {
-		int i = 2;
+		int i = 1;
 		while (i > 0) {
 			pptvcartoonCrawler crawler = new pptvcartoonCrawler("crawl", true, i);
-			crawler.setThreads(50);
-			crawler.setTopN(100);
+			crawler.setThreads(5);
+			crawler.setTopN(10);
 			// crawler.setResumable(true);
 			/* start crawl with depth of 4 */
 			crawler.start(4);

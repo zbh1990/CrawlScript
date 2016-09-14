@@ -19,7 +19,7 @@ public class QIYIMovieJob implements Job {
 	public void execute(JobExecutionContext arg0) throws JobExecutionException {
 		System.out.println("执行QIYIMovieJob时间：" + new Date());
 		try {
-			QIYIMovieCrawler.execute(2);
+			QIYIMovieCrawler.execute(1);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

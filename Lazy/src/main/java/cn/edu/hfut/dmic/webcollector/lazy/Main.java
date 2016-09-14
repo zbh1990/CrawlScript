@@ -157,7 +157,7 @@ public class Main {
 		System.out.println(job.getKey() + " 已被安排执行于: " + sdf.format(ft) + "，并且以如下重复规则重复执行: " + trigger.getCronExpression());
 		
 		job = newJob(PPtvJob.class).withIdentity("PPtvJob", "group1").build();
-		trigger = newTrigger().withIdentity("trigger15", "group1").withSchedule(cronSchedule("0 53 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23 * * ?")).build();
+		trigger = newTrigger().withIdentity("trigger15", "group1").withSchedule(cronSchedule("0 55 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23 * * ?")).build();
 		ft = sched.scheduleJob(job, trigger);
 		sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss SSS");
 		System.out.println(job.getKey() + " 已被安排执行于: " + sdf.format(ft) + "，并且以如下重复规则重复执行: " + trigger.getCronExpression());
