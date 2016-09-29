@@ -115,6 +115,7 @@ public class hanjuTVCrawler extends BreadthCrawler {
 		}
 
 		if (page.matchUrl("http://www.y3600.com/hanju/2016/.*.html")||page.matchUrl("http://www.y3600.com/hanju/2015/.*.html")) {
+			//if (page.matchUrl("http://www.y3600.com/hanju/2016/898.html")) {
 			/* we use jsoup to parse page */
 			try {
 				Vodinfo v = infomap.get(page.getUrl());
@@ -133,7 +134,6 @@ public class hanjuTVCrawler extends BreadthCrawler {
 				v.setYear("2016");
 				v.setDirector("");
 				v.setScore("10");
-				//v.setImglide("http://pic1.qiyipic.com/common/lego/20160705/9184be135ca144a0999a55ac26392e8c.jpg");
 				 CloseableHttpClient httpclient = HttpClients.createDefault(); 
 				 String url = v.getImg();
 				 String[] names  = url.split("/");

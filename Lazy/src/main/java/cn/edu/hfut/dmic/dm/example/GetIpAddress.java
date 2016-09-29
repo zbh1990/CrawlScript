@@ -25,14 +25,14 @@ public class GetIpAddress {
 	public static String getInfo(String srcUrl, int timeoutMils) throws IOException {
 
 		HttpClient httpClient = new HttpClient();
-		httpClient.getHostConfiguration().setProxy("120.26.119.149", 14201);
+		//httpClient.getHostConfiguration().setProxy("120.26.119.149", 14201);
 		
 		GetMethod get = new GetMethod(srcUrl);
-		get.addRequestHeader("Referer","http://www.easyplayer.site/");
+		//get.addRequestHeader("Referer","http://www.easyplayer.site/");
 				/*Cache-Control: max-age=0
 				Upgrade-Insecure-Requests: 1*/
 
-		get.addRequestHeader("Host","apis.web.pptv.com");
+		//get.addRequestHeader("Host","apis.web.pptv.com");
 		get.addRequestHeader("Connection","keep-alive");
 		get.addRequestHeader("User-Agent","Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36");
 		get.addRequestHeader("Accept","text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8");
