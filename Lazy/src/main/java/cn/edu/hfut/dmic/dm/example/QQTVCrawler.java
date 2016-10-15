@@ -104,6 +104,10 @@ public class QQTVCrawler extends BreadthCrawler {
 		}
 		if (page.matchUrl("http://v.qq.com/cover/.*html")) {
 			String nexturl = StringUtils.substringBetween(page.getHtml(), "url=\'", "\'");
+			if(StringUtils.isBlank(nexturl)){
+				System.out.println("nexturl is null pageurl is "+page.getUrl());
+				return;
+			}
 			infomap.put(nexturl, infomap.get(page.getUrl()));
 			next.add(nexturl);
 		}

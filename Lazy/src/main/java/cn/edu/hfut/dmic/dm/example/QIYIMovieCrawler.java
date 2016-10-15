@@ -82,6 +82,10 @@ public class QIYIMovieCrawler extends BreadthCrawler {
 		if (page.matchUrl("http://www.iqiyi.com/lib/m_.*html.*")) {
 			/* we use jsoup to parse page */
 			try {
+				String playurl = page.select(".search-btn-large.search-btn-green").attr("href");
+				if(playurl.indexOf("www.iqiyi.com")<0){
+					return ;
+				}
 				Vodinfo v = new Vodinfo();
 				String img = StringUtils.substringBetween( page.select(".result_pic>a>img").toString(), "src=\"", "\"");
 				v.setImg(img);
@@ -130,16 +134,20 @@ public class QIYIMovieCrawler extends BreadthCrawler {
 				v.setHits(9999);
 				v.setDesc(page.select(".mod-body.introduce-info>p").toString());
 				
-				 CloseableHttpClient httpclient = HttpClients.createDefault(); 
-				 String url = v.getImg();
+				String url = v.getImg();
 				 String[] names  = url.split("/");
 				 String name = names[names.length-1];
+				 String path = "upload/vod/"+name;
+				 
+				 
+				 CloseableHttpClient httpclient = HttpClients.createDefault(); 
 				 HttpGet get = new HttpGet(url);
 				 CloseableHttpResponse response = httpclient.execute(get);
-				 String path = "upload/vod/"+name;
 				FileUtils.writeFile(new File("/home/2kys/"+path), EntityUtils.toByteArray(response.getEntity()));
+				
+				
 				v.setImg(path);
-				String playurl = page.select(".search-btn-large.search-btn-green").attr("href");
+				
 				v.setUrl(playurl.split("#")[0]);
 
 				dbutil.exesql(v);

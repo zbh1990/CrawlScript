@@ -10,6 +10,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
+import org.json.JSONObject;
 import org.jsoup.helper.StringUtil;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -28,7 +29,7 @@ import cn.edu.hfut.dmic.webcollector.util.FileUtils;
 public class youkuDMCrawler extends BreadthCrawler {
 
 	public static Map<String, String> t = new HashMap<String, String>();
-	public Map<String,Vodinfo> infomap=new HashMap<String,Vodinfo>();
+	public Map<String, Vodinfo> infomap = new HashMap<String, Vodinfo>();
 	public static DBUtil dbutil = DBUtil.getInstance();
 
 	static {
@@ -83,30 +84,46 @@ public class youkuDMCrawler extends BreadthCrawler {
 			 * Elements nodes = page.select(".item>a"); String title =
 			 * page.select(".title>a").text();
 			 */
-			String nexturl = page.select(".title>a").attr("href");
-			int index =page.getHtml().indexOf("episodeLast");
+			String nexturl = page.select(".desc-link").attr("href");
+			if(StringUtils.isBlank(nexturl)){
+				nexturl = page.select(".title>a").attr("href");
+			}
 			/**
-			 * var videoId = '127671152';
-				var showid="19791";
+			 * var videoId = '127671152'; var showid="19791";
 			 */
-			String episodeLast = StringUtils.substringBetween(page.getHtml(),"episodeLast = ", ";");
+			String episodeLast = StringUtils.substringBetween(page.getHtml(), "episodeLast = ", ";");
+			if(StringUtils.isBlank(episodeLast)){
+				episodeLast = StringUtils.substringBetween(page.getHtml(), "episodeLast:\"", "\"");
+			}
+/*			String vid = StringUtils.substringBetween(page.getHtml(), "videoId:\"", "\",");
+			String showid = StringUtils.substringBetween(page.getHtml(), "showid:\"", "\",");*/
 			String vid = StringUtils.substringBetween(page.getHtml(),"videoId = '", "';");
+			if(StringUtils.isBlank(vid)){
+				vid = StringUtils.substringBetween(page.getHtml(), "videoId:\"", "\",");
+			}
 			String showid = StringUtils.substringBetween(page.getHtml(),"var showid=\"", "\";");
-			if(StringUtils.isNotBlank(episodeLast)){
-				try{
-					int i = Integer.parseInt(episodeLast)/100+1;
-						Vodinfo v = new Vodinfo();
-						v.setUrl(vid+"_"+showid+"_"+i);
-						infomap.put(nexturl, v);
-				}catch(Exception e){
-					
-				}
+			if(StringUtils.isBlank(showid)){
+				showid = StringUtils.substringBetween(page.getHtml(), "showid:\"", "\",");
 			}
 			
-			next.add(nexturl);
-		}
+			if (StringUtils.isNotBlank(episodeLast)) {
+				try {
+					int i = Integer.parseInt(episodeLast) / 100 + 1;
+					Vodinfo v = new Vodinfo();
+					v.setUrl(vid + "_" + showid + "_" + i);
+					infomap.put(nexturl, v);
+				} catch (Exception e) {
 
-		if (page.matchUrl("http://www.youku.com/show_page/id_.*html")) {
+				}
+			}
+
+			next.add(nexturl);
+			this.setRegexRule(null);
+			System.out.println("nexturl:" + nexturl);
+		}
+		// http://www.youku.com/show_page/id
+		// http://www.youku.com/show_page/id_zcc001f06962411de83b1.html
+		if (page.matchUrl("http://www.youku.com/show_page/id.*html")) {
 			try {
 				/* we use jsoup to parse page */
 				String url = page.getUrl();
@@ -136,19 +153,26 @@ public class youkuDMCrawler extends BreadthCrawler {
 				//
 				// Elements typenode = page.select(".crumbs>a");
 				// String type
-				
-			
+
 				String result = "";
 				String[] params = v.getUrl().split("_");
-				int pagenum = Integer.parseInt(params[2]); 
-				for(int n=1;n<=pagenum;n++){
+				int pagenum = Integer.parseInt(params[2]);
+				for (int n = 1; n <= pagenum; n++) {
+					// http://v.youku.com/page/playlist/pm_3_vid_435315672_showid_19461_page_1
 					String playurl = "http://v.youku.com/v_vpofficiallistv5/id_"+params[0]+"_showid_"+params[1]+"_page_"+n+"?__rt=1&__ro=listitem_page"+n;// http://v.youku.com/v_vpofficiallistv5/id_127671152_showid_19791_page_2?__rt=1&__ro=listitem_page2
+					//String playurl = "http://v.youku.com/page/playlist/pm_3_vid_" + params[0] + "_showid_" + params[1]+ "_page_" + n;
 					String temp = GetIpAddress.getInfo(playurl, 3000);
-					if(temp.indexOf("相关片段")>-1){
-					result+= StringUtils.substringBetween(temp,"节目信息","相关片段");
-					}else{
-					result+= temp;
+					if(temp.indexOf("稍等")>-1){
+						System.out.println(11);
+						 playurl = "http://v.youku.com/page/playlist/pm_3_vid_" + params[0] + "_showid_" + params[1]+ "_page_" + n;
+						 temp = GetIpAddress.getInfo(playurl, 3000);
+						 String date = new JSONObject(temp).get("html")+"";
+							result += date;
 					}
+					
+				
+						result += temp;
+					
 				}
 				// 创建 Pattern 对象
 				Pattern r = Pattern.compile("<li .+?>[\\s\\S]+?</li>");
@@ -166,14 +190,14 @@ public class youkuDMCrawler extends BreadthCrawler {
 					if (StringUtil.isBlank(URL)) {
 						continue;
 					}
-					
+
 					urllist.append(num + "$" + URL);
 					urllist.append("#");
 				}
 				String s_url = urllist.toString();
 				s_url = s_url.substring(0, s_url.length() - 1);
 				v.setUrl(s_url);
-				v.setNeedpay("第"+i+"集");
+				v.setNeedpay("第" + i + "集");
 				/*
 				 * if (page.select(".item").size() > 3) { Elements nodes =
 				 * page.select(".coll_10>ul>li>a"); StringBuffer urllist = new
@@ -204,14 +228,14 @@ public class youkuDMCrawler extends BreadthCrawler {
 	}
 
 	public static void main(String[] args) throws Exception {
-		int i = 20;
+		int i = 1;
 		while (i > 0) {
 			youkuDMCrawler crawler = new youkuDMCrawler("crawl", true, i);
 			crawler.setThreads(50);
 			crawler.setTopN(100);
 			// crawler.setResumable(true);
 			/* start crawl with depth of 4 */
-			crawler.start(4);
+			crawler.start(5);
 			i--;
 		}
 
@@ -270,6 +294,25 @@ public class youkuDMCrawler extends BreadthCrawler {
 			FileUtils.writeFileWithParent(f, FileUtils.readFile(f, "utf-8") + v.toString(), "utf-8");
 		}
 
+	}
+
+	/**
+	 * unicode 转字符串
+	 */
+	public static String unicode2String(String utfString) {
+		StringBuilder sb = new StringBuilder();
+		int i = -1;
+		int pos = 0;
+
+		while ((i = utfString.indexOf("\\u", pos)) != -1) {
+			sb.append(utfString.substring(pos, i));
+			if (i + 5 < utfString.length()) {
+				pos = i + 6;
+				sb.append((char) Integer.parseInt(utfString.substring(i + 2, i + 6), 16));
+			}
+		}
+
+		return sb.toString();
 	}
 
 }

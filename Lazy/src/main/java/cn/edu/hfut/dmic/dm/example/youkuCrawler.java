@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.jsoup.helper.StringUtil;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -78,18 +79,16 @@ public class youkuCrawler extends BreadthCrawler {
 		if (page.matchUrl("http://v.youku.com/v_show/id.*html")) {
 			/* we use jsoup to parse page */
 			Document doc = page.getDoc();
-
-			/* extract title and content of news by css selector */
-			/*
-			 * Elements nodes = page.select(".item>a"); String title =
-			 * page.select(".title>a").text();
-			 */
-			String nexturl = page.select(".title>a").attr("href");
-
+			//String nexturl = page.select(".desc-link").attr("href");
+			String nexturl = page.select(".desc-link").attr("href");
+			if(StringUtils.isBlank(nexturl)){
+				nexturl = page.select(".title>a").attr("href");
+			}
+			this.setRegexRule(null);
 			next.add(nexturl);
 		}
 
-		if (page.matchUrl("http://www.youku.com/show_page/id_.*html")) {
+		if (page.matchUrl("http://www.youku.com/show_page/.*html")) {
 			try {
 				/* we use jsoup to parse page */
 				Document doc = page.getDoc();

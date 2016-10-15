@@ -89,15 +89,11 @@ public class pptvcartoonCrawler extends BreadthCrawler {
 				// 播放列表地址
 				String playinfourl = "http://apis.web.pptv.com/show/videoList?pid=" + param.get("pid");
 				String playinfo = GetIpAddress.getInfo(playinfourl, 5000);
-				System.out.println("playinfourl:" + playinfourl);
-				System.out.println("playinfo:" + playinfo);
 				String date = new JSONObject(playinfo).get("data")+"";
 				int j=3;
 				if (StringUtils.isBlank(date)) {
 					while (j > 0) {
 						playinfo = GetIpAddress.getInfo(playinfourl, 5000);
-						System.out.println("playinfourl:" + playinfourl);
-						System.out.println("playinfo:" + playinfo);
 						date = new JSONObject(playinfo).get("data")+"";
 						if (StringUtils.isNotBlank(date)) {
 							break;
@@ -106,8 +102,6 @@ public class pptvcartoonCrawler extends BreadthCrawler {
 						Thread.sleep(1000);
 					}
 				}
-				System.out.println("playinfourl:" + playinfourl);
-				System.out.println("playinfo:" + playinfo);
 				JSONArray playinfoList = new JSONObject(playinfo).getJSONObject("data").getJSONArray("list");
 				StringBuffer urllist = new StringBuffer();
 				String needpay = "";

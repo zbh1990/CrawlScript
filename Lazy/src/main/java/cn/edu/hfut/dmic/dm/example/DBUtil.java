@@ -69,6 +69,7 @@ public class DBUtil {
 				if(v.getUrl().equals(d_playurl)){
 					return;
 				}
+				boolean needupdate =false;
 				if (StringUtils.isNotBlank(d_playfrom) && d_playfrom.indexOf("$$$") > -1) {
 					String[] d_playurls = d_playurl.split("\\$\\$\\$");
 					String[] d_playfroms = d_playfrom.split("\\$\\$\\$");
@@ -78,6 +79,7 @@ public class DBUtil {
 								return;
 							} else {
 								d_playurls[i] = v.getUrl();
+								needupdate = true;
 								break;
 							}
 						}
@@ -88,17 +90,24 @@ public class DBUtil {
 						newplayer = newplayer + d_playfroms[i] + "$$$";
 						newurl = newurl + d_playurls[i] + "$$$";
 					}
-					//v.setUrl(newurl+v.getUrl());
-					//v.setPlayer(newplayer+v.getPlayer());
+					if(needupdate){
+						v.setUrl(newurl);
+						v.setPlayer(newplayer);
+					}else{
+						v.setUrl(newurl+v.getUrl());
+						v.setPlayer(newplayer+v.getPlayer());
+					}
+				}else{
+					if (StringUtils.isNotBlank(d_playfrom) && d_playfrom.indexOf("$$$") < 0&&!d_playfrom.equals(v.getPlayer())) {
+						String newplayer = "";
+						String newurl = "";
+						newplayer = d_playfrom + "$$$" + v.getPlayer();
+						newurl = d_playurl + "$$$" + v.getUrl();
+						v.setUrl(newurl);
+						v.setPlayer(newplayer);
+					}
 				}
-				if (StringUtils.isNotBlank(d_playfrom) && d_playfrom.indexOf("$$$") < 0&&!d_playfrom.equals(v.getPlayer())) {
-					String newplayer = "";
-					String newurl = "";
-					newplayer = d_playfrom + "$$$" + v.getPlayer();
-					newurl = d_playurl + "$$$" + v.getUrl();
-					v.setUrl(newurl);
-					v.setPlayer(newplayer);
-				}
+			
 			}
 			pst.execute(v.toString());
 		} catch (Exception e) {
