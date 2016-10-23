@@ -55,6 +55,7 @@ public class DBUtil {
 
 	public void exesql(Vodinfo v) {
 		PreparedStatement pst = null;
+		boolean isexist = false;
 		try {
 			String selectsql = "select * from mac_vod where d_name = \'" + v.getTitle() + "\'";
 			pst = uniqueInstance.conn.prepareStatement(selectsql);// 准备执行语句
@@ -69,45 +70,41 @@ public class DBUtil {
 				if(v.getUrl().equals(d_playurl)){
 					return;
 				}
-				boolean needupdate =false;
 				if (StringUtils.isNotBlank(d_playfrom) && d_playfrom.indexOf("$$$") > -1) {
 					String[] d_playurls = d_playurl.split("\\$\\$\\$");
 					String[] d_playfroms = d_playfrom.split("\\$\\$\\$");
 					for (int i = 0; i < d_playfroms.length; i++) {
 						if (d_playfroms[i].equals(v.getPlayer())) {// 判断是否同一个平台，youku，tudou
+							isexist = true;
 							if (v.getUrl().equals(d_playurls[i])) {// 判断是否同一个url,url有无变化
 								return;
 							} else {
 								d_playurls[i] = v.getUrl();
-								needupdate = true;
 								break;
 							}
 						}
 					}
 					String newplayer = "";
 					String newurl = "";
+					if(!isexist){
+						newplayer=v.getPlayer()+ "$$$";
+						newurl=v.getUrl()+ "$$$";
+					}
 					for (int i = 0; i < d_playfroms.length; i++) {// 组织新的playform和url
 						newplayer = newplayer + d_playfroms[i] + "$$$";
 						newurl = newurl + d_playurls[i] + "$$$";
 					}
-					if(needupdate){
-						v.setUrl(newurl);
-						v.setPlayer(newplayer);
-					}else{
-						v.setUrl(newurl+v.getUrl());
-						v.setPlayer(newplayer+v.getPlayer());
-					}
-				}else{
-					if (StringUtils.isNotBlank(d_playfrom) && d_playfrom.indexOf("$$$") < 0&&!d_playfrom.equals(v.getPlayer())) {
-						String newplayer = "";
-						String newurl = "";
-						newplayer = d_playfrom + "$$$" + v.getPlayer();
-						newurl = d_playurl + "$$$" + v.getUrl();
-						v.setUrl(newurl);
-						v.setPlayer(newplayer);
-					}
+					v.setUrl(newurl);
+					v.setPlayer(newplayer);
 				}
-			
+				if (StringUtils.isNotBlank(d_playfrom) && d_playfrom.indexOf("$$$") < 0&&!d_playfrom.equals(v.getPlayer())) {
+					String newplayer = "";
+					String newurl = "";
+					newplayer = d_playfrom + "$$$" + v.getPlayer();
+					newurl = d_playurl + "$$$" + v.getUrl();
+					v.setUrl(newurl);
+					v.setPlayer(newplayer);
+				}
 			}
 			pst.execute(v.toString());
 		} catch (Exception e) {
