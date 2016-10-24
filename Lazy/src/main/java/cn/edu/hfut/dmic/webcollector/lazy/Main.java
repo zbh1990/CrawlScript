@@ -30,11 +30,8 @@ import org.quartz.Scheduler;
 import org.quartz.SchedulerFactory;
 import org.quartz.impl.StdSchedulerFactory;
 
-import cn.edu.hfut.dmic.dm.example.pptvcartoonCrawler;
-import cn.edu.hfut.dmic.webcollector.lazy.job.HanjutvJob;
 import cn.edu.hfut.dmic.webcollector.lazy.job.HunnanJob;
 import cn.edu.hfut.dmic.webcollector.lazy.job.HunnanTVJob;
-import cn.edu.hfut.dmic.webcollector.lazy.job.IQIYItvJob;
 import cn.edu.hfut.dmic.webcollector.lazy.job.IQIYItvJob2;
 import cn.edu.hfut.dmic.webcollector.lazy.job.LetvJob;
 import cn.edu.hfut.dmic.webcollector.lazy.job.LetvTvJob;
@@ -42,6 +39,7 @@ import cn.edu.hfut.dmic.webcollector.lazy.job.LetvdmJob;
 import cn.edu.hfut.dmic.webcollector.lazy.job.PPtvJob;
 import cn.edu.hfut.dmic.webcollector.lazy.job.QIYIMovieJob;
 import cn.edu.hfut.dmic.webcollector.lazy.job.QQtvJob;
+import cn.edu.hfut.dmic.webcollector.lazy.job.fenzizyJob;
 import cn.edu.hfut.dmic.webcollector.lazy.job.sohuTVJob;
 import cn.edu.hfut.dmic.webcollector.lazy.job.youKuJob;
 import cn.edu.hfut.dmic.webcollector.lazy.job.youKuShowJob;
@@ -139,7 +137,7 @@ public class Main {
 		System.out.println(job.getKey() + " 已被安排执行于: " + sdf.format(ft) + "，并且以如下重复规则重复执行: " + trigger.getCronExpression());
 		
 		
-		job = newJob(HanjutvJob.class).withIdentity("HanjutvJob", "group1").build();
+		job = newJob(fenzizyJob.class).withIdentity("fenzizyJob", "group1").build();
 		trigger = newTrigger().withIdentity("trigger12", "group1").withSchedule(cronSchedule("0 40 1,5,9,13,17,21 * * ?")).build();
 		ft = sched.scheduleJob(job, trigger);
 		System.out.println(job.getKey() + " 已被安排执行于: " + sdf.format(ft) + "，并且以如下重复规则重复执行: " + trigger.getCronExpression());

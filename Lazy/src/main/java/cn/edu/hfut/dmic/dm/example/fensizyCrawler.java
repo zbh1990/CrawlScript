@@ -189,16 +189,6 @@ public class fensizyCrawler extends BreadthCrawler {
 			crawler.start(4);
 			i--;
 		}
-		 i = pagesize;
-		while (i > 0) {
-			fensizyCrawler crawler = new fensizyCrawler("crawl", true, i,"2015");
-			crawler.setThreads(5);
-			crawler.setTopN(10);
-			// crawler.setResumable(true);
-			/* start crawl with depth of 4 */
-			crawler.start(4);
-			i--;
-		}
 	}
 	public static void main(String[] args) throws Exception {
 		int i = 4;
