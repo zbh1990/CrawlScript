@@ -16,6 +16,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
 import org.jsoup.select.Elements;
 
+import cn.edu.hfut.dmic.dm.example.domain.Vodinfo;
 import cn.edu.hfut.dmic.webcollector.model.CrawlDatums;
 import cn.edu.hfut.dmic.webcollector.model.Page;
 import cn.edu.hfut.dmic.webcollector.plugin.berkeley.BreadthCrawler;
@@ -182,6 +183,10 @@ public class sohuTvCrawler extends BreadthCrawler {
 					}
 				}
 				String s_url = urllist.toString();
+				if(s_url.length()<=1){
+					System.out.println("s_url:"+s_url);
+					return ;
+				}
 				s_url = s_url.substring(0, s_url.length() - 1);
 				v.setUrl(s_url);
 
@@ -199,7 +204,7 @@ public class sohuTvCrawler extends BreadthCrawler {
 	}
 
 	public static void main(String[] args) throws Exception {
-		int i = 80;
+		int i = 3;
 		while (i > 0) {
 			sohuTvCrawler crawler = new sohuTvCrawler("crawl", true, i);
 			crawler.setThreads(50);

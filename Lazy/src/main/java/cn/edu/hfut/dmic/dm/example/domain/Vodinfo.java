@@ -1,4 +1,4 @@
-package cn.edu.hfut.dmic.dm.example;
+package cn.edu.hfut.dmic.dm.example.domain;
 
 public class Vodinfo {
 
@@ -33,7 +33,7 @@ public class Vodinfo {
 				+ System.currentTimeMillis() / 1000 + ", " + System.currentTimeMillis() / 1000 + ", "
 				+ System.currentTimeMillis() / 1000 + ", 0, '" + desc + "', '" + player + "', '0', '', '" + url
 				+ "', '', '', '', '')ON DUPLICATE KEY UPDATE   d_playfrom='" + player + "',  d_time="
-						+ System.currentTimeMillis() / 1000 + ",  d_type='"
+						+ System.currentTimeMillis() / 1000 +  ",  d_pic='"	+ img + "',  d_type='"
 								+ bigtype + "', d_playurl='"+url+"', d_remarks='"+needpay+"';";
 	}
 

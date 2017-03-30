@@ -28,6 +28,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
 import org.jsoup.select.Elements;
 
+import cn.edu.hfut.dmic.dm.example.domain.Vodinfo;
 import cn.edu.hfut.dmic.webcollector.model.CrawlDatums;
 import cn.edu.hfut.dmic.webcollector.model.Page;
 import cn.edu.hfut.dmic.webcollector.plugin.berkeley.BreadthCrawler;
@@ -169,7 +170,7 @@ public class QIYIMovieCrawler extends BreadthCrawler {
 			i--;
 		}
 	}
-	public static void main(String[] args) throws Exception {
+	public static void main1(String[] args) throws Exception {
 		int i = 1;
 		while (i > 0) {
 			QIYIMovieCrawler crawler = new QIYIMovieCrawler("crawl", true, i);
@@ -181,20 +182,20 @@ public class QIYIMovieCrawler extends BreadthCrawler {
 			i--;
 		}
 	}
-	public static void main1(String[] args) throws ClientProtocolException, IOException {
+	public static void main(String[] args) throws ClientProtocolException, IOException {
 		 CloseableHttpClient httpclient = HttpClients.createDefault(); 
-		 String url ="http://pic8.qiyipic.com/image/20160720/0d/ab/a_100028281_m_601_195_260.jpg";
+		 String url ="http://222.73.245.236/youku/6573D93CBD4307EBB21476FB6/03000807015841A8A804BC2D9B7D2F4FCF2841-EDDD-A942-C502-891EB8915BCA.mp4";
 		 String[] names  = url.split("/");
 		 String name = names[names.length-1];
 		 System.out.println(name);
 		 HttpGet get = new HttpGet(url);
-		 //get.setHeader("Referer","http://easyplayer.site/?m=vod-detail-id-22033.html");
+		 get.setHeader("Referer","http://easyplayer.site/?m=vod-detail-id-22033.html");
 		 CloseableHttpResponse response = httpclient.execute(get);
 		 String date = DateUtils.formatDate(new Date(),"yyyy-MM-dd");
 		 System.out.println(date);
 		 String path = "upload/vod/"+date+"/"+name;
-		FileUtils.writeFile(new File("/home/2kys/"+path), EntityUtils.toByteArray(response.getEntity()));
-		//FileUtils.writeFile(new File("d:/test.jpg"), EntityUtils.toByteArray(response.getEntity()));
+		 //FileUtils.writeFile(new File("/home/2kys/"+path), EntityUtils.toByteArray(response.getEntity()));
+		FileUtils.writeFile(new File("d:/test.mp4"), EntityUtils.toByteArray(response.getEntity()));
 		 System.out.println();
 		
 	}

@@ -17,6 +17,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import cn.edu.hfut.dmic.dm.example.domain.Vodinfo;
 import cn.edu.hfut.dmic.webcollector.model.CrawlDatums;
 import cn.edu.hfut.dmic.webcollector.model.Page;
 import cn.edu.hfut.dmic.webcollector.plugin.berkeley.BreadthCrawler;
@@ -84,11 +85,14 @@ public class youkuCrawler extends BreadthCrawler {
 			if(StringUtils.isBlank(nexturl)){
 				nexturl = page.select(".title>a").attr("href");
 			}
+			if(StringUtils.isBlank(nexturl)){
+				return;
+			}
 			this.setRegexRule(null);
-			next.add(nexturl);
+			next.add("http:"+nexturl);
 		}
 
-		if (page.matchUrl("http://www.youku.com/show_page/.*html")) {
+		if (page.matchUrl("http://list.youku.com/show/id_.*html")) {
 			try {
 				/* we use jsoup to parse page */
 				Document doc = page.getDoc();
@@ -96,7 +100,6 @@ public class youkuCrawler extends BreadthCrawler {
 
 				/* extract title and content of news by css selector */
 
-				String bigtype = page.select(".type").get(0).childNodes().get(0).childNode(0).outerHtml();
 				String smalltype = page.select(".type").get(1).attr("title");
 				String title = page.select(".name").text();
 				String img = page.select(".thumb").get(0).childNodes().get(0).attr("src");

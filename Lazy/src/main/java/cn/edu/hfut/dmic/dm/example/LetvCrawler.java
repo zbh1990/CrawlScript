@@ -15,6 +15,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
 import org.jsoup.select.Elements;
 
+import cn.edu.hfut.dmic.dm.example.domain.Vodinfo;
 import cn.edu.hfut.dmic.webcollector.model.CrawlDatum;
 import cn.edu.hfut.dmic.webcollector.model.CrawlDatums;
 import cn.edu.hfut.dmic.webcollector.model.Page;
@@ -109,20 +110,20 @@ public class LetvCrawler extends BreadthCrawler {
 				Document doc = page.getDoc();
 				Vodinfo v = new Vodinfo();
 
-				/* extract title and content of news by css selector */
-				List<Node> nodelist = page.select(".w150").get(0).childNodes();
-				String img = nodelist.get(1).childNodes().get(1).childNodes().get(0).attr("src");
+				
+				String img = page.select(".play_pic>img").attr("src");
 
-				List<Node> infolist = nodelist.get(3).childNodes();
-				String title = infolist.get(1).childNode(0).attr("title");
-				String director = infolist.get(3).childNode(1).childNodes().toString();
-				// infolist.get(5) 主演
-				// infolist.get(9) 地区
-				// infolist.get(11) 类型
-				// infolist.get(13) year
-				// infolist.get(17) decs
-				String bigtype = infolist.get(11).childNode(0).childNodes().get(1).childNodes().get(0).outerHtml();
-				String smalltype = infolist.get(11).childNode(0).childNodes().get(1).childNodes().get(0).outerHtml();
+				List<Element> infolist = page.select(".play_info>ul>li");
+				String title = page.select(".play_name>h2").text();
+				
+				// infolist.get(4) 主演
+				// infolist.get(1) 地区
+				// infolist.get(2) 导演
+				// infolist.get(3) 类型
+				// infolist.get(0) year
+				// .play_intro>p decs
+				String director = infolist.get(2).childNode(1).childNode(0).childNodes().toString();
+				String smalltype = infolist.get(3).childNode(1).childNode(0).childNodes().toString();
 				;
 				// String title = page.select(".name").text();
 				// String img =
@@ -139,18 +140,19 @@ public class LetvCrawler extends BreadthCrawler {
 				v.setImg(img);
 				v.setHits(999);
 				v.setScore("9");
-				v.setArea(infolist.get(9).childNode(0).childNodes().get(1).childNodes().get(0).outerHtml());
-				v.setYear(infolist.get(13).childNode(0).childNodes().get(1).childNodes().get(0).outerHtml());
-				v.setActeres(infolist.get(5).childNode(1).childNodes().toString());
+				v.setArea(infolist.get(1).childNode(1).childNode(0).childNodes().toString());
+				String year = infolist.get(0).childNode(1).childNode(0).childNode(0).toString();
+				v.setYear(year.split("-")[0]);
+				v.setActeres(infolist.get(4).childNode(1).childNode(0).childNodes().toString());
 				v.setDirector(director);
 				// v.setScore(page.select(".num").get(0).childNode(0).outerHtml());
-				v.setDesc(infolist.get(17).childNode(0).toString());
-				String s_url = page.select(".showPic").get(0).childNodes().get(1).attr("href");// s_url.substring(0,
+				v.setDesc(page.select(".play_intro>p").text());
+				String s_url = page.select(".play_btn").attr("href");// s_url.substring(0,
 																								// s_url.length()
 																								// -
 																								// 1);
-				String imglide = page.select(".showPic>a>img").get(0).attr("src");
-				v.setImglide(imglide);
+			
+			
 				v.setPlayer("letv");
 				v.setUrl(s_url);
 				v.setNeedpay("");

@@ -9,7 +9,7 @@ import org.quartz.JobExecutionException;
 import cn.edu.hfut.dmic.dm.example.DBUtil;
 import cn.edu.hfut.dmic.dm.example.LetvCrawler;
 import cn.edu.hfut.dmic.dm.example.LetvDMCrawler;
-import cn.edu.hfut.dmic.dm.example.Vodinfo;
+import cn.edu.hfut.dmic.dm.example.domain.Vodinfo;
 
 /**
  * @brief 继承了Job接口的任务类

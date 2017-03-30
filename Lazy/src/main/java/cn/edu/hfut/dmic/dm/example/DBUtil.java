@@ -8,14 +8,11 @@ import java.sql.SQLException;
 
 import org.apache.commons.lang.StringUtils;
 
-public class DBUtil {
-	// public static final String url =
-	// "jdbc:mysql://216.189.156.242/1bqs?characterEncoding=GBK";
+import cn.edu.hfut.dmic.dm.example.domain.Vodinfo;
 
-	public static final String url = "jdbc:mysql://127.0.0.1/1bqs?characterEncoding=GBK";
-	public static final String name = "com.mysql.jdbc.Driver";
-	public static final String user = "root";
-	public static final String password = "root";
+public class DBUtil {
+
+	
 
 	private Connection conn = null;
 	private static DBUtil uniqueInstance = null;
@@ -63,11 +60,15 @@ public class DBUtil {
 			if (result != null) {
 				String d_playurl = null;
 				String d_playfrom = null;
+				String d_remarks = null;
+				String img = null;
 				while (result.next()) {
 					d_playurl = result.getString("d_playurl");
 					d_playfrom = result.getString("d_playfrom");
+					d_remarks = result.getString("d_remarks");
+					img = result.getString("d_pic");
 				}
-				if(v.getUrl().equals(d_playurl)){
+				if(v.getUrl().equals(d_playurl)&&v.getImg().equals(img)&&v.getNeedpay().equals(d_remarks)){
 					return;
 				}
 				if (StringUtils.isNotBlank(d_playfrom) && d_playfrom.indexOf("$$$") > -1) {
@@ -76,7 +77,7 @@ public class DBUtil {
 					for (int i = 0; i < d_playfroms.length; i++) {
 						if (d_playfroms[i].equals(v.getPlayer())) {// 判断是否同一个平台，youku，tudou
 							isexist = true;
-							if (v.getUrl().equals(d_playurls[i])) {// 判断是否同一个url,url有无变化
+							if (v.getUrl().equals(d_playurls[i])&&v.getImg().equals(img)) {// 判断是否同一个url,url有无变化
 								return;
 							} else {
 								d_playurls[i] = v.getUrl();

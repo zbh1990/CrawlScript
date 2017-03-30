@@ -15,6 +15,7 @@ import org.json.JSONObject;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Node;
 
+import cn.edu.hfut.dmic.dm.example.domain.Vodinfo;
 import cn.edu.hfut.dmic.webcollector.model.CrawlDatums;
 import cn.edu.hfut.dmic.webcollector.model.Page;
 import cn.edu.hfut.dmic.webcollector.plugin.berkeley.BreadthCrawler;
@@ -54,7 +55,7 @@ public class HunanTVCrawler extends BreadthCrawler {
 	public HunanTVCrawler(String crawlPath, boolean autoParse,int id) {
 		super(crawlPath, autoParse);
 		/* start page */
-		this.addSeed("http://list.mgtv.com/3/-----1----5-"+id+"---.html");//电视剧
+		this.addSeed("http://list.mgtv.com/3/---------2-"+id+"---.html");//电视剧
 		
 		//this.addSeed("http://list.youku.com/category/show/c_100_s_1_d_1_p_"+id+".html")
 		
@@ -62,7 +63,7 @@ public class HunanTVCrawler extends BreadthCrawler {
 		/* fetch url like http://news.hfut.edu.cn/show-xxxxxxhtml */
 		//http://www.hunantv.com/v/3/150215/f/1503499.html
 		//http://www.hunantv.com/v/3/102123/f/1503553.html
-		this.addRegex("http://www.hunantv.com/v/3.*html");
+		this.addRegex("http://www.mgtv.com/b/3.*html");
 		/* do not fetch jpg|png|gif */
 		// this.addRegex("-.*\\.(jpg|png|gif).*");
 		/* do not fetch url contains # */
@@ -73,7 +74,7 @@ public class HunanTVCrawler extends BreadthCrawler {
 	public void visit(Page page, CrawlDatums next) {
 		/* if page is news page */
 
-		if (page.matchUrl("http://www.hunantv.com/v/3.*html")) {
+		if (page.matchUrl("http://www.mgtv.com/b/3.*html")) {
 			/* we use jsoup to parse page */
 			Document doc = page.getDoc();
 			Vodinfo v = new Vodinfo();
@@ -87,13 +88,13 @@ public class HunanTVCrawler extends BreadthCrawler {
 			//图片地址
 			String infourl = "http://v.api.mgtv.com/list/movielist?video_id="+id;
 			//播放人数
-			String playinfourl ="http://videocenter-2039197532.cn-north-1.elb.amazonaws.com.cn//dynamicinfo?vid="+id;
+			String playinfourl ="http://pcweb.api.mgtv.com/movie/list?video_id="+id;
 			try {
 				String info=GetIpAddress.getInfo(infourl, 5000);
 				String playinfo=GetIpAddress.getInfo(playinfourl, 5000);
 				JSONObject j= new JSONObject(info);
 				JSONObject infob= j.getJSONObject("data").getJSONObject("info");
-				//v.setHits(new JSONObject(playinfo).getJSONObject("data").getInt("all"));
+				v.setYear(new JSONObject(playinfo).getJSONObject("data").getJSONObject("info").getString("release"));
 				v.setImg(infob.getString("img"));
 				v.setTitle(infob.getString("title"));
 			} catch (IOException e1) {
@@ -102,30 +103,30 @@ public class HunanTVCrawler extends BreadthCrawler {
 			}
 			/* extract title and content of news by css selector */
 
-			//.item.short 0主演 1类型    
-			//.item.long 0导演 1地区
-			List<Node> actores= page.select(".item.short").get(0).childNodes();
+			//.u-meta-long 0主演 1类型    
+			//.u-meta-short 0导演 1地区
+			List<Node> actores= page.select(".u-meta-long").get(0).childNodes();
 			String actors = "";
 			for(Node node: actores){
 				if(node.childNodes()!=null&&node.childNodes().size()>0){
 					actors+=node.childNode(0).outerHtml();
 				}
 			}
-			List<Node> smalltypes= page.select(".item.short").get(1).childNodes();
+			List<Node> smalltypes= page.select(".u-meta-long").get(1).childNodes();
 			String smalltype = "";
 			for(Node node: smalltypes){
 				if(node.childNodes()!=null&&node.childNodes().size()>0){
 					smalltype=smalltype+node.childNode(0).outerHtml()+"/";
 				}
 			}
-			List<Node> directors= page.select(".item.long").get(0).childNodes();
+			List<Node> directors= page.select(".u-meta-short").get(0).childNodes();
 			String director = "";
 			for(Node node: directors){
 				if(node.childNodes()!=null&&node.childNodes().size()>0){
 					director+=node.childNode(0).outerHtml();
 				}
 			}
-			List<Node> areas= page.select(".item.long").get(1).childNodes();
+			List<Node> areas= page.select(".u-meta-short").get(1).childNodes();
 			String area = "";
 			for(Node node: areas){
 				if(node.childNodes()!=null&&node.childNodes().size()>0){
@@ -158,7 +159,7 @@ public class HunanTVCrawler extends BreadthCrawler {
 	}
 
 	public static void main(String[] args) throws Exception {
-		int i=2;
+		int i=1;
 		while(i>0){
 		HunanTVCrawler crawler = new HunanTVCrawler("crawl", true,i);
 		crawler.setThreads(5);
