@@ -1,11 +1,14 @@
-package cn.edu.hfut.dmic.dm.example;
+package cn.edu.hfut.dmic.dm.example.weixin;
 
-import java.io.File;
+import java.io.BufferedWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -16,19 +19,17 @@ import org.apache.http.util.EntityUtils;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import cn.edu.hfut.dmic.dm.example.domain.imgattach;
 import cn.edu.hfut.dmic.dm.example.domain.imginfo;
 import cn.edu.hfut.dmic.dm.example.util.ImgDBUtil;
 import cn.edu.hfut.dmic.webcollector.model.CrawlDatums;
 import cn.edu.hfut.dmic.webcollector.model.Page;
 import cn.edu.hfut.dmic.webcollector.plugin.berkeley.BreadthCrawler;
-import cn.edu.hfut.dmic.webcollector.util.FileUtils;
 
 /**
  * Crawling news from hfut news
  *
  */
-public class aitaotuCrawler extends BreadthCrawler {
+public class qianmingCrawler extends BreadthCrawler {
 
 	public static Map<String, String> t = new HashMap<String, String>();
 	public static ImgDBUtil dbutil = ImgDBUtil.getInstance();
@@ -48,65 +49,34 @@ public class aitaotuCrawler extends BreadthCrawler {
 	 *            if autoParse is true,BreadthCrawler will auto extract links
 	 *            which match regex rules from pag
 	 */
-	public aitaotuCrawler(String crawlPath, boolean autoParse, int id, String year) {
+	public qianmingCrawler(String crawlPath, boolean autoParse, int id, String year) {
 		super(crawlPath, autoParse);
-		String url = "http://aitaotu.92game.net/touxiang/index_" + id + ".html";
+		String url = "http://www.qqtn.com/qm/weixinqm_" + id + ".html";
 		this.addSeed(url);//
 		// this.addRegex("http://www.ziyuanpian.com/detail.*");
 	}
 
 	@Override
 	public void visit(Page page, CrawlDatums next) {
-		if (page.matchUrl("http://aitaotu.92game.net/touxiang/index.*html")) {
-			Elements as = page.select(".item.masonry_brick");
+		if (page.matchUrl("http://www.qqtn.com/qm/weixinqm_.*html")) {
+			Elements as = page.select(".g-list-dl>dt>a");
 			for (int i = 0; i < as.size() - 1; i++) {
 				Element a = as.get(i);
-				String nexturl = "http://aitaotu.92game.net" + a.select(".img>a").get(0).attr("href");
-				String id = nexturl.substring(nexturl.lastIndexOf("touxiang") + 8, nexturl.lastIndexOf(".html"));
-				
-				Element t = a.select(".img>a>img").get(0);
-				String title = t.attr("title");
-				Elements tags = a.select(".blue");
-				String cover = t.attr("data-original");
-				String tag = "";
-				for (Element temp : tags) {
-					tag += temp.text() + ",";
-				}
-				imginfo imginfo=new imginfo();
-				imginfo.setCid("3");
-				imginfo.setTitle(title);
-				imginfo.setId(id);
-				imginfo.setTag(tag);
-				imginfo.setCover(cover);
-				imgmap.put(id, imginfo);
-				String like = a.select(".items_likes").text();
-				int total = Integer.parseInt(like.substring(like.indexOf("共") + 1, like.indexOf("张")));
-				next.add(nexturl);
-				
-				downloadimg(cover, id);
-				for (int c = 2; c < total; c++) {
-					next.add("http://aitaotu.92game.net/touxiang/" + id + "_" + c + ".html");
-				}
-				//dbutil.exesql(imginfo.toString());
+				String nexturl = a.attr("href");
+				next.add("http://www.qqtn.com"+nexturl);
 			}
 		} else {
 
-			if (page.matchUrl("http://aitaotu.92game.net/touxiang/.*")) {
-				String url = page.getUrl();
-				String id = "";
-				if (url.indexOf("_") > -1) {
-					id = url.substring(url.lastIndexOf("touxiang") + 8, url.lastIndexOf("_"));
-				} else {
-					id = url.substring(url.lastIndexOf("touxiang") + 8, url.lastIndexOf(".html"));
+			if (page.matchUrl("http://www.qqtn.com/article/article_.*")) {
+				Elements as = page.select("#zoom>p");
+				for (int i = 0; i < as.size() - 1; i++) {
+					Element a = as.get(i);
+					String file = a.text();
+					if(StringUtils.isBlank(file))
+						return;
+					method3(file);
 				}
-				imgattach imgattach=new imgattach();
-				String file =page.select("#big-pic>p>a>img").get(0).attr("src");
-				imgattach.setArticle_id(id);
-				imgattach.setFile(file);
-				imginfo imginfo=imgmap.get(id);
-				imginfo.getImgattachlist().add(imgattach);
-				//dbutil.exesql(imgattach.toString());
-				downloadimg(file, id);
+				
 			}
 		}
 
@@ -115,7 +85,7 @@ public class aitaotuCrawler extends BreadthCrawler {
 	public static void execute(int pagesize) throws Exception {
 		int i = pagesize;
 		while (i > 0) {
-			aitaotuCrawler crawler = new aitaotuCrawler("crawl", true, i, "2016");
+			qianmingCrawler crawler = new qianmingCrawler("crawl", true, i, "2016");
 			crawler.setThreads(50);
 			crawler.setTopN(100);
 			// crawler.setResumable(true);
@@ -126,9 +96,9 @@ public class aitaotuCrawler extends BreadthCrawler {
 	}
 
 	public static void main(String[] args) throws Exception {
-		int i = 30;
+		int i = 6;
 		while (i > 1) {
-			aitaotuCrawler crawler = new aitaotuCrawler("crawl", true, i, "2016");
+			qianmingCrawler crawler = new qianmingCrawler("crawl", true, i, "2016");
 			crawler.setThreads(50);
 			crawler.setTopN(100);
 			// crawler.setResumable(true);
@@ -138,33 +108,24 @@ public class aitaotuCrawler extends BreadthCrawler {
 		}
 	}
 
-	public static void downloadimg(String url,String id) {
-		CloseableHttpClient httpclient = HttpClients.createDefault();
-		String[] names = url.split("/");
-		String name = names[names.length - 1];
-		System.out.println(name);
-		HttpGet get = new HttpGet(url);
-		CloseableHttpResponse response;
+	
+	public static void method3( String content) {
+		String file="D:/test/qianming.txt";
+		BufferedWriter out = null;
 		try {
-			response = httpclient.execute(get);
-			String path = "D:/test/" +id+"/";
-			long filelength = response.getEntity().getContentLength();
-			if(filelength<=28){
-				return ;
-			}
-			FileUtils.writeFileWithParent(new File(path+name),
-			 EntityUtils.toByteArray(response.getEntity()));
-		} catch (ClientProtocolException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		out = new BufferedWriter(new OutputStreamWriter(
+		new FileOutputStream(file, true)));
+		out.write(content+"\r\n");
+		} catch (Exception e) {
+		e.printStackTrace();
+		} finally {
+		try {
+		out.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		e.printStackTrace();
 		}
-		
-		//System.out.println(EntityUtils.toString(response.getEntity()));
-
-	}
+		}
+		}
 	public static void main1(String[] args) throws ClientProtocolException, IOException {
 		CloseableHttpClient httpclient = HttpClients.createDefault();
 		String url = "http://www.ziyuanpian.com/detail/?2266.html";

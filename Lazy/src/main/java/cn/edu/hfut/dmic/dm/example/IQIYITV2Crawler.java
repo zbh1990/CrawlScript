@@ -188,7 +188,7 @@ public class IQIYITV2Crawler extends BreadthCrawler {
 			i--;
 		}
 	}
-	public static void main(String[] args) throws Exception {
+	public static void main1(String[] args) throws Exception {
 		int i = 1;
 		while (i > 0) {
 			IQIYITV2Crawler crawler = new IQIYITV2Crawler("crawl", true, i);
@@ -200,20 +200,20 @@ public class IQIYITV2Crawler extends BreadthCrawler {
 			i--;
 		}
 	}
-	public static void main1(String[] args) throws ClientProtocolException, IOException {
+	public static void main(String[] args) throws ClientProtocolException, IOException {
 		 CloseableHttpClient httpclient = HttpClients.createDefault(); 
-		 String url ="http://pic8.qiyipic.com/image/20160720/0d/ab/a_100028281_m_601_195_260.jpg";
+		 String url ="http://img.meikew.com/uploads/2017/09/DKiLNQKVoAACuHH.jpg";
 		 String[] names  = url.split("/");
 		 String name = names[names.length-1];
 		 System.out.println(name);
 		 HttpGet get = new HttpGet(url);
-		 //get.setHeader("Referer","http://easyplayer.site/?m=vod-detail-id-22033.html");
+		 get.setHeader("Referer","https://www.fulihub.net");
 		 CloseableHttpResponse response = httpclient.execute(get);
 		 String date = DateUtils.formatDate(new Date(),"yyyy-MM-dd");
 		 System.out.println(date);
 		 String path = "upload/vod/"+date+"/"+name;
-		FileUtils.writeFile(new File("/home/2kys/"+path), EntityUtils.toByteArray(response.getEntity()));
-		//FileUtils.writeFile(new File("d:/test.jpg"), EntityUtils.toByteArray(response.getEntity()));
+		 //FileUtils.writeFile(new File("/home/2kys/"+path), EntityUtils.toByteArray(response.getEntity()));
+		FileUtils.writeFile(new File("d:/test/test.jpg"), EntityUtils.toByteArray(response.getEntity()));
 		 System.out.println();
 		
 	}

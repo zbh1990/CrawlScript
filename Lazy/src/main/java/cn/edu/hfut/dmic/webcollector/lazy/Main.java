@@ -36,12 +36,10 @@ import cn.edu.hfut.dmic.webcollector.lazy.job.IQIYItvJob2;
 import cn.edu.hfut.dmic.webcollector.lazy.job.LetvJob;
 import cn.edu.hfut.dmic.webcollector.lazy.job.LetvTvJob;
 import cn.edu.hfut.dmic.webcollector.lazy.job.LetvdmJob;
-import cn.edu.hfut.dmic.webcollector.lazy.job.fenzizyJob;
 import cn.edu.hfut.dmic.webcollector.lazy.job.sohuTVJob;
 import cn.edu.hfut.dmic.webcollector.lazy.job.youKuJob;
 import cn.edu.hfut.dmic.webcollector.lazy.job.youKuShowJob;
 import cn.edu.hfut.dmic.webcollector.lazy.job.youkuDMJob;
-import cn.edu.hfut.dmic.webcollector.lazy.job.ziyuanpianMovieJob;
 
 /**
  *
@@ -134,23 +132,13 @@ public class Main {
 		ft = sched.scheduleJob(job, trigger);
 		System.out.println(job.getKey() + " 已被安排执行于: " + sdf.format(ft) + "，并且以如下重复规则重复执行: " + trigger.getCronExpression());
 		
-		
-		job = newJob(fenzizyJob.class).withIdentity("fenzizyJob", "group1").build();
-		trigger = newTrigger().withIdentity("trigger12", "group1").withSchedule(cronSchedule("0 40 1,5,9,13,17,21 * * ?")).build();
-		ft = sched.scheduleJob(job, trigger);
-		System.out.println(job.getKey() + " 已被安排执行于: " + sdf.format(ft) + "，并且以如下重复规则重复执行: " + trigger.getCronExpression());
-		
-		
+				
 		job = newJob(sohuTVJob.class).withIdentity("sohuTVJob", "group1").build();
 		trigger = newTrigger().withIdentity("trigger13", "group1").withSchedule(cronSchedule("0 50 1,5,9,13,17,21 * * ?")).build();
 		ft = sched.scheduleJob(job, trigger);
 		System.out.println(job.getKey() + " 已被安排执行于: " + sdf.format(ft) + "，并且以如下重复规则重复执行: " + trigger.getCronExpression());
 		
-		job = newJob(ziyuanpianMovieJob.class).withIdentity("ziyuanpianMovieJob", "group1").build();
-		trigger = newTrigger().withIdentity("trigger14", "group1").withSchedule(cronSchedule("0 0,15 0,12,6,10,14,18,22 * * ?")).build();
-		ft = sched.scheduleJob(job, trigger);
-		sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss SSS");
-		System.out.println(job.getKey() + " 已被安排执行于: " + sdf.format(ft) + "，并且以如下重复规则重复执行: " + trigger.getCronExpression());
+
 		
 		/*job = newJob(PPtvJob.class).withIdentity("PPtvJob", "group1").build();
 		trigger = newTrigger().withIdentity("trigger15", "group1").withSchedule(cronSchedule("0 10 2,6,10,14,18,22 * * ?")).build();

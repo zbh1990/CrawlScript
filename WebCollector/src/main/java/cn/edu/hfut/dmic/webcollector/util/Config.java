@@ -28,10 +28,10 @@ public class Config {
     public static long THREAD_KILLER=1000*60*2;
     public static long WAIT_THREAD_END_TIME=1000*60;
     /*最大连续重定向次数*/
-    public static int MAX_REDIRECT=2;
+    public static int MAX_REDIRECT=3;
     
-     public static int TIMEOUT_CONNECT = 3000;
-     public static int TIMEOUT_READ = 10000;
+     public static int TIMEOUT_CONNECT = 10000;
+     public static int TIMEOUT_READ = 30000;
      public static int MAX_EXECUTE_COUNT=10;
      public static String DEFAULT_HTTP_METHOD="GET";
 

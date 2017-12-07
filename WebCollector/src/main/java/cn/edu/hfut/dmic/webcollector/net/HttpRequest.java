@@ -173,6 +173,7 @@ public class HttpRequest {
 
             return response;
         } catch (Exception ex) {
+        	System.out.println("crawlDatum.getUrl():"+crawlDatum.getUrl());
             throw ex;
         } finally {
             if (is != null) {

@@ -14,6 +14,12 @@ public class ImgDBUtil {
 	// public static final String url =
 	// "jdbc:mysql://216.189.156.242/1bqs?characterEncoding=GBK";
 
+	public static final String url = "jdbc:mysql://127.0.0.1/tutucms?characterEncoding=GBK";
+	public static final String password = "root";
+	//public static final String password = "zhizhuys";
+	//public static final String url = "jdbc:mysql://174.139.170.106/1bqs?characterEncoding=GBK";
+	public static final String name = "com.mysql.jdbc.Driver";
+	public static final String user = "root";
 	
 
 	private Connection conn = null;

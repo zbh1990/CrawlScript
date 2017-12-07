@@ -70,7 +70,7 @@ public abstract class AutoParseCrawler extends Crawler implements Executor, Visi
         HttpResponse response = requester.getResponse(datum);
         Page page = new Page(datum, response);
         visitor.visit(page, next);
-        if (autoParse && !regexRule.isEmpty()) {
+        if (autoParse && regexRule!=null&&!regexRule.isEmpty()) {
             parseLink(page, next);
         }
         afterParse(page, next);

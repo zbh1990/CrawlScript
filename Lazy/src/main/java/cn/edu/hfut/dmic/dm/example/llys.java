@@ -87,16 +87,16 @@ public class llys extends BreadthCrawler {
 	public llys(String crawlPath, boolean autoParse, int id,String url,String type) {
 		super(crawlPath, autoParse);
 		/* start page */
-		this.addSeed("http://www.2ta.tv" + url+id );// 电影
+		this.addSeed("http://v.23c.im" + url+id );// 电影
 		this.url=url;
 		this.type=type;
-		this.addRegex("http://www.2ta.tv/.*");
+		this.addRegex("http://v.23c.im/.*");
 	}
 
 	@Override
 	public void visit(Page page, CrawlDatums next) {
 
-		if (page.matchUrl("http://www.2ta.tv"+url+".*")) {
+		if (page.matchUrl("http://v.23c.im"+url+".*")) {
 			/* we use jsoup to parse page */
 			try {
 				Elements elements = page.select("#ha");
@@ -110,6 +110,9 @@ public class llys extends BreadthCrawler {
 						return;
 					}
 					Vodinfo v = new Vodinfo();
+					if(StringUtils.isBlank(t.get(type))){
+						System.out.println(type);
+					}
 					v.setBigtype(t.get(type));
 					v.setImg(img);
 					v.setImglide(img );

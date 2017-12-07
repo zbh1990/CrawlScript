@@ -1,6 +1,8 @@
 package cn.edu.hfut.dmic.dm.example;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -10,6 +12,12 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.utils.DateUtils;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.jsoup.nodes.Document;
@@ -94,7 +102,7 @@ public class pptvcartoonCrawler extends BreadthCrawler {
 				int j=3;
 				if (StringUtils.isBlank(date)) {
 					while (j > 0) {
-						playinfo = GetIpAddress.getInfo(playinfourl, 5000);
+						playinfo = getByurl(playinfourl);
 						date = new JSONObject(playinfo).get("data")+"";
 						if (StringUtils.isNotBlank(date)) {
 							break;
@@ -103,7 +111,12 @@ public class pptvcartoonCrawler extends BreadthCrawler {
 						Thread.sleep(1000);
 					}
 				}
-				JSONArray playinfoList = new JSONObject(playinfo).getJSONObject("data").getJSONArray("list");
+				JSONArray playinfoList = null;
+				try{
+				 playinfoList = new JSONObject(playinfo).getJSONObject("data").getJSONArray("list");
+				}catch(Exception e){
+					e.printStackTrace();
+				}
 				StringBuffer urllist = new StringBuffer();
 				String needpay = "";
 				for (int i = 0; i < playinfoList.length(); i++) {
@@ -242,5 +255,24 @@ public class pptvcartoonCrawler extends BreadthCrawler {
 		}
 
 	}
+
+	public static void main1(String[] args) throws FileNotFoundException, IOException {
+		CloseableHttpClient httpclient = HttpClients.createDefault();
+		String url = "http://apis.web.pptv.com/show/videoList?pid=9042479";
+		HttpGet get = new HttpGet(url);
+		get.setHeader("Cookie", "pgv_pvi=8222973952; ppdi=eyJwbHQiOiJwYyIsIm1hYyI6IiIsIm1hYzEiOiIiLCJhbmRyb2lkaWQiOiIiLCJhbmRyb2lkaWQxIjoiIiwiaWRmYSI6IiIsIm9yaWdpbklwIjoiMTgzLjE1Ny44MC4yMTIifQ; PUID=e598c97fc68a47e880af-1e78d79beccc; PUID_CTM=315532800; ppi=302c3538; Hm_lvt_7adaa440f53512a144c13de93f4c22db=1492081394,1492677228,1492681036,1493283424; Hm_lpvt_7adaa440f53512a144c13de93f4c22db=1493283424; pgv_si=s8354109440");
+
+		CloseableHttpResponse response = httpclient.execute(get);
+		System.out.println(EntityUtils.toString(response.getEntity()));
+	}
+	
+	public static String getByurl(String url) throws FileNotFoundException, IOException {
+		CloseableHttpClient httpclient = HttpClients.createDefault();
+		HttpGet get = new HttpGet(url);
+		get.setHeader("Cookie", "pgv_pvi=8222973952; ppdi=eyJwbHQiOiJwYyIsIm1hYyI6IiIsIm1hYzEiOiIiLCJhbmRyb2lkaWQiOiIiLCJhbmRyb2lkaWQxIjoiIiwiaWRmYSI6IiIsIm9yaWdpbklwIjoiMTgzLjE1Ny44MC4yMTIifQ; PUID=e598c97fc68a47e880af-1e78d79beccc; PUID_CTM=315532800; ppi=302c3538; Hm_lvt_7adaa440f53512a144c13de93f4c22db=1492081394,1492677228,1492681036,1493283424; Hm_lpvt_7adaa440f53512a144c13de93f4c22db=1493283424; pgv_si=s8354109440");
+		CloseableHttpResponse response = httpclient.execute(get);
+		return EntityUtils.toString(response.getEntity());
+	}
+
 
 }
