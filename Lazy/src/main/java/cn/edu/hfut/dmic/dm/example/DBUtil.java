@@ -11,14 +11,8 @@ import org.apache.commons.lang.StringUtils;
 import cn.edu.hfut.dmic.dm.example.domain.Vodinfo;
 
 public class DBUtil {
-	//public static final String url ="jdbc:mysql://127.0.0.1/1bqs?characterEncoding=GBK";
-     //public static final String url = "jdbc:mysql://216.189.156.242/1bqs?characterEncoding=GBK";
-
-	public static final String url = "jdbc:mysql://23.88.160.93/fulihub?characterEncoding=GBK";
-	 //public static final String password = "19656234587_xc";
-	//public static final String password = "root";
-	public static final String password = "zcy_zcy1993";
-	//public static final String url = "jdbc:mysql://174.139.170.106/1bqs?characterEncoding=GBK";
+	public static final String url ="jdbc:mysql://127.0.0.1/1bqs?characterEncoding=GBK";
+	public static final String password = "root";
 	public static final String name = "com.mysql.jdbc.Driver";
 	public static final String user = "root";
 	
