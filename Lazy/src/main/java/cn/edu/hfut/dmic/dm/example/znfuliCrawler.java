@@ -105,7 +105,11 @@ public class znfuliCrawler extends BreadthCrawler {
 				String cat =page.select(".single-meta-category>a").attr("href").replace("https://www.zhainanfulishe.net/", "");
 				
 				System.out.println(cat);
-				updateSite(title, content,t.get(cat),tag);
+				if(content.indexOf("zhainanfulishe")>-1){
+					System.out.println("img has zhainanfulishe");;
+				}else{
+					updateSite(title, content,t.get(cat),tag);
+				}
 			}
 		}
 
